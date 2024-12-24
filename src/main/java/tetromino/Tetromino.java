@@ -11,8 +11,8 @@ public class Tetromino {
     public Block[] tempB = new Block[4];
 
     int autoDropCounter = 0; // mino drops once this hits the dropInterval
-
     public int direction = 1; // there are 4 directions (1/2/3/4)
+    public boolean leftCollision, rightCollision, bottomCollision;
 
 
     public void create(Color c) {
@@ -29,6 +29,37 @@ public class Tetromino {
 
 
     public void setXY(int x, int y) {
+
+    }
+
+
+    public void checkMovementCollision() {
+
+        leftCollision = false;
+        rightCollision = false;
+        bottomCollision = false;
+
+        for (int i = 0; i < b.length; i++) {
+
+            // Left wall
+            if (b[i].x  == PlayManager.left_x) {
+                leftCollision = true;
+            }
+
+            // Right wall
+            if (b[i].x + Block.SIZE == PlayManager.right_x) {
+                rightCollision = true;
+            }
+
+            // Bottom wall
+            if (b[i].y + Block.SIZE == PlayManager.bottom_y) {
+                bottomCollision = true;
+            }
+        }
+    }
+
+
+    public void checkRotationCollision() {
 
     }
 
@@ -96,46 +127,59 @@ public class Tetromino {
             KeyHandler.upPressed = false;
         }
 
-        if (KeyHandler.downPressed) {
-            b[0].y += Block.SIZE;
-            b[1].y += Block.SIZE;
-            b[2].y += Block.SIZE;
-            b[3].y += Block.SIZE;
+        // Check for collision before moving
+        checkMovementCollision();
 
-            // reset
-            autoDropCounter = 0;
+        if (KeyHandler.downPressed) {
+
+            if (!bottomCollision) {
+                b[0].y += Block.SIZE;
+                b[1].y += Block.SIZE;
+                b[2].y += Block.SIZE;
+                b[3].y += Block.SIZE;
+
+                // reset
+                autoDropCounter = 0;
+            }
 
             KeyHandler.downPressed = false;
         }
 
         if (KeyHandler.rightPressed) {
-            b[0].x += Block.SIZE;
-            b[1].x += Block.SIZE;
-            b[2].x += Block.SIZE;
-            b[3].x += Block.SIZE;
+
+            if (!rightCollision) {
+                b[0].x += Block.SIZE;
+                b[1].x += Block.SIZE;
+                b[2].x += Block.SIZE;
+                b[3].x += Block.SIZE;
+            }
 
             KeyHandler.rightPressed = false;
         }
 
         if (KeyHandler.leftPressed) {
-            b[0].x -= Block.SIZE;
-            b[1].x -= Block.SIZE;
-            b[2].x -= Block.SIZE;
-            b[3].x -= Block.SIZE;
+
+            if (!leftCollision) {
+                b[0].x -= Block.SIZE;
+                b[1].x -= Block.SIZE;
+                b[2].x -= Block.SIZE;
+                b[3].x -= Block.SIZE;
+            }
 
             KeyHandler.leftPressed = false;
         }
 
+        if (!bottomCollision) {
+            autoDropCounter++; // counter increases every frame
 
-        autoDropCounter++; // counter increases every frame
-
-        if (autoDropCounter == PlayManager.dropInterval) {
-            // TODO: Why can't we just set b[0] and update the rest in one go?
-            b[0].y += Block.SIZE;
-            b[1].y += Block.SIZE;
-            b[2].y += Block.SIZE;
-            b[3].y += Block.SIZE;
-            autoDropCounter = 0;
+            if (autoDropCounter == PlayManager.dropInterval) {
+                // TODO: Why can't we just set b[0] and update the rest in one go?
+                b[0].y += Block.SIZE;
+                b[1].y += Block.SIZE;
+                b[2].y += Block.SIZE;
+                b[3].y += Block.SIZE;
+                autoDropCounter = 0;
+            }
         }
     }
 
