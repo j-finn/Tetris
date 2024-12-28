@@ -14,6 +14,8 @@ public class Tetromino {
     public int direction = 1; // there are 4 directions (1/2/3/4)
     public boolean leftCollision, rightCollision, bottomCollision;
     private boolean isBlockActive = true;
+    public boolean isBlockDeactivating = false;
+    int deactivateCounter = 0;
 
 
     public void create(Color c) {
@@ -167,6 +169,10 @@ public class Tetromino {
 
     public void update() {
 
+        if (isBlockDeactivating) {
+            deactivating();
+        }
+
         // Move mino
         if (KeyHandler.upPressed) {
 
@@ -230,7 +236,7 @@ public class Tetromino {
         }
 
         if (bottomCollision) {
-            isBlockActive = false;
+            isBlockDeactivating = true;
         } else {
             autoDropCounter++; // counter increases every frame
 
@@ -242,6 +248,22 @@ public class Tetromino {
                 b[3].y += Block.SIZE;
                 autoDropCounter = 0;
             }
+        }
+    }
+
+    public void deactivating() {
+        deactivateCounter++;
+
+        // wait 45 frames until deactivating
+        if (deactivateCounter == 45) {
+
+            deactivateCounter = 0;
+            checkMovementCollision(); // check bottom is still touching
+
+            if (bottomCollision) {
+                isBlockActive = false;
+            }
+
         }
     }
 
