@@ -3,6 +3,7 @@ package main.java;
 import main.java.tetromino.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -24,6 +25,10 @@ public class PlayManager {
     Tetromino currentMino;
     final int MINO_START_X;
     final int MINO_START_Y;
+    Tetromino nextMino;
+    final int NEXT_MINO_START_X;
+    final int NEXT_MINO_START_Y;
+    public static ArrayList<Block> staticBlocks = new ArrayList<>();
 
     public final static int dropInterval = 60; // mino drops every 60 frames
 
@@ -38,14 +43,37 @@ public class PlayManager {
         MINO_START_X = left_x + (WIDTH / 2) - Block.SIZE;
         MINO_START_Y = top_y + Block.SIZE;
 
+        // initialise next mino start position
+        NEXT_MINO_START_X = right_x + 175;
+        NEXT_MINO_START_Y = top_y + 500;
+
         // initialise mino
         currentMino = pickRandomTetromino();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
+
+        // initialise next mino
+        nextMino = pickRandomTetromino();
+        nextMino.setXY(NEXT_MINO_START_X, NEXT_MINO_START_Y);
     }
 
 
     public void update() {
-        currentMino.update();
+
+        if (!currentMino.isBlockActive()) {
+            staticBlocks.add(currentMino.b[0]);
+            staticBlocks.add(currentMino.b[1]);
+            staticBlocks.add(currentMino.b[2]);
+            staticBlocks.add(currentMino.b[3]);
+
+            // Replace current mino with next mino
+            currentMino = nextMino;
+            currentMino.setXY(MINO_START_X, MINO_START_Y);
+            nextMino = pickRandomTetromino();
+            nextMino.setXY(NEXT_MINO_START_X, NEXT_MINO_START_Y);
+
+        } else {
+            currentMino.update();
+        }
     }
 
 
@@ -71,6 +99,15 @@ public class PlayManager {
         // Draw the current mino
         if (currentMino != null) {
             currentMino.draw(graphics2D);
+        }
+
+        // Draw the next mino
+        if (nextMino != null) {
+            nextMino.draw(graphics2D);
+        }
+
+        for (int i = 0; i < staticBlocks.size(); i++) {
+            staticBlocks.get(i).draw(graphics2D);
         }
 
         // Draw pause
