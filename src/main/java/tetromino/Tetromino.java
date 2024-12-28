@@ -44,6 +44,8 @@ public class Tetromino {
         rightCollision = false;
         bottomCollision = false;
 
+        checkStaticBlockCollision();
+
         for (int i = 0; i < b.length; i++) {
 
             // Left wall
@@ -73,6 +75,8 @@ public class Tetromino {
         rightCollision = false;
         bottomCollision = false;
 
+        checkStaticBlockCollision();
+
         for (int i = 0; i < tempB.length; i++) {
 
             // Left wall
@@ -88,6 +92,29 @@ public class Tetromino {
             // Bottom wall
             if (tempB[i].y == PlayManager.bottom_y) {
                 bottomCollision = true;
+            }
+        }
+    }
+
+
+    public void checkStaticBlockCollision() {
+
+        for (int i = 0; i < PlayManager.staticBlocks.size(); i++) {
+            int targetX = PlayManager.staticBlocks.get(i).x;
+            int targetY = PlayManager.staticBlocks.get(i).y;
+
+            for (int j = 0; j < b.length; j++) {
+                if (b[j].y + Block.SIZE == targetY && b[j].x == targetX) {
+                    bottomCollision = true;
+                }
+
+                if (b[j].y == targetY && b[j].x - Block.SIZE == targetX) {
+                    leftCollision = true;
+                }
+
+                if (b[j].y == targetY && b[j].x + Block.SIZE == targetX) {
+                    rightCollision = true;
+                }
             }
         }
     }
