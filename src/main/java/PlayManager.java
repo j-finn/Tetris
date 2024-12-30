@@ -30,7 +30,9 @@ public class PlayManager {
     final int NEXT_MINO_START_Y;
     public static ArrayList<Block> staticBlocks = new ArrayList<>();
 
+    // Others
     public final static int dropInterval = 60; // mino drops every 60 frames
+    boolean gameOver;
 
     public PlayManager() {
         //Main play area frame
@@ -64,6 +66,11 @@ public class PlayManager {
             staticBlocks.add(currentMino.b[1]);
             staticBlocks.add(currentMino.b[2]);
             staticBlocks.add(currentMino.b[3]);
+
+            if (currentMino.b[0].x == MINO_START_X && currentMino.b[0].y == MINO_START_Y) {
+                // means that block has collided immediately
+                gameOver = true;
+            }
 
             currentMino.isBlockDeactivating = false;
 
@@ -158,6 +165,13 @@ public class PlayManager {
         // Draw pause
         graphics2D.setColor(Color.YELLOW);
         graphics2D.setFont(graphics2D.getFont().deriveFont(50f));
+
+        if (gameOver) {
+            x = left_x + 25;
+            y = top_y + 320;
+            graphics2D.drawString("GAME OVER", x, y);
+        }
+
         if (KeyHandler.pausePressed) {
             x = left_x + 70;
             y = top_y + 320;
