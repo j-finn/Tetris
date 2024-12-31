@@ -41,28 +41,54 @@ public abstract class Tetromino {
     }
 
 
-    public void checkMovementCollision() {
+    public void dropBlock() {
+
+        // FIXME: This is a bit laggy. Possibly room for performance optimisations?
+        tempB[0] = b[0];
+        tempB[1] = b[1];
+        tempB[2] = b[2];
+        tempB[3] = b[3];
+
+        while (!bottomCollision) {
+            tempB[0].y++;
+            tempB[1].y++;
+            tempB[2].y++;
+            tempB[3].y++;
+
+            checkMovementCollision(tempB);
+
+            if (bottomCollision) {
+                b[0].y = tempB[0].y;
+                b[1].y = tempB[1].y;
+                b[2].y = tempB[2].y;
+                b[3].y = tempB[3].y;
+            }
+        }
+    }
+
+
+    public void checkMovementCollision(Block[] minoBlock) {
 
         leftCollision = false;
         rightCollision = false;
         bottomCollision = false;
 
-        checkStaticBlockCollision();
+        checkStaticBlockCollision(minoBlock);
 
-        for (int i = 0; i < b.length; i++) {
+        for (int i = 0; i < minoBlock.length; i++) {
 
             // Left wall
-            if (b[i].x  == PlayManager.left_x) {
+            if (minoBlock[i].x  == PlayManager.left_x) {
                 leftCollision = true;
             }
 
             // Right wall
-            if (b[i].x + Block.SIZE == PlayManager.right_x) {
+            if (minoBlock[i].x + Block.SIZE == PlayManager.right_x) {
                 rightCollision = true;
             }
 
             // Bottom wall
-            if (b[i].y + Block.SIZE == PlayManager.bottom_y) {
+            if (minoBlock[i].y + Block.SIZE == PlayManager.bottom_y) {
                 bottomCollision = true;
             }
         }
@@ -78,7 +104,7 @@ public abstract class Tetromino {
         rightCollision = false;
         bottomCollision = false;
 
-        checkStaticBlockCollision();
+        checkStaticBlockCollision(b);
 
         for (int i = 0; i < tempB.length; i++) {
 
@@ -100,22 +126,22 @@ public abstract class Tetromino {
     }
 
 
-    public void checkStaticBlockCollision() {
+    public void checkStaticBlockCollision(Block[] minoBlock) {
 
         for (int i = 0; i < PlayManager.staticBlocks.size(); i++) {
             int targetX = PlayManager.staticBlocks.get(i).x;
             int targetY = PlayManager.staticBlocks.get(i).y;
 
-            for (int j = 0; j < b.length; j++) {
-                if (b[j].y + Block.SIZE == targetY && b[j].x == targetX) {
+            for (int j = 0; j < minoBlock.length; j++) {
+                if (minoBlock[j].y + Block.SIZE == targetY && minoBlock[j].x == targetX) {
                     bottomCollision = true;
                 }
 
-                if (b[j].y == targetY && b[j].x - Block.SIZE == targetX) {
+                if (minoBlock[j].y == targetY && minoBlock[j].x - Block.SIZE == targetX) {
                     leftCollision = true;
                 }
 
-                if (b[j].y == targetY && b[j].x + Block.SIZE == targetX) {
+                if (minoBlock[j].y == targetY && minoBlock[j].x + Block.SIZE == targetX) {
                     rightCollision = true;
                 }
             }
@@ -188,7 +214,7 @@ public abstract class Tetromino {
         }
 
         // Check for collision before moving
-        checkMovementCollision();
+        checkMovementCollision(b);
 
         if (KeyHandler.downPressed) {
 
@@ -229,6 +255,12 @@ public abstract class Tetromino {
             KeyHandler.leftPressed = false;
         }
 
+        if (KeyHandler.dropPressed) {
+            dropBlock();
+
+            KeyHandler.dropPressed = false;
+        }
+
         if (bottomCollision) {
             isBlockDeactivating = true;
             GamePanel.soundEffect.play(4, true);
@@ -253,7 +285,7 @@ public abstract class Tetromino {
         if (deactivateCounter == 45) {
 
             deactivateCounter = 0;
-            checkMovementCollision(); // check bottom is still touching
+            checkMovementCollision(b); // check bottom is still touching
 
             if (bottomCollision) {
                 isBlockActive = false;
