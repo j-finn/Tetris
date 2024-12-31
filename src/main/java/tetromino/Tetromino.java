@@ -1,5 +1,6 @@
 package main.java.tetromino;
 
+import main.java.GamePanel;
 import main.java.KeyHandler;
 import main.java.PlayManager;
 
@@ -191,6 +192,7 @@ public class Tetromino {
             }
 
             KeyHandler.upPressed = false;
+            GamePanel.soundEffect.play(3, true);
         }
 
         // Check for collision before moving
@@ -237,6 +239,7 @@ public class Tetromino {
 
         if (bottomCollision) {
             isBlockDeactivating = true;
+            GamePanel.soundEffect.play(4, true);
         } else {
             autoDropCounter++; // counter increases every frame
 

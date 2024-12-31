@@ -31,8 +31,13 @@ public class PlayManager {
     public static ArrayList<Block> staticBlocks = new ArrayList<>();
 
     // Others
-    public final static int dropInterval = 60; // mino drops every 60 frames
-    boolean gameOver;
+    public static int dropInterval = 60; // mino drops every 60 frames
+    public boolean gameOver = false;
+
+    // Score
+    int level = 1;
+    int score;
+    int lines;
 
     public PlayManager() {
         //Main play area frame
@@ -70,6 +75,8 @@ public class PlayManager {
             if (currentMino.b[0].x == MINO_START_X && currentMino.b[0].y == MINO_START_Y) {
                 // means that block has collided immediately
                 gameOver = true;
+                GamePanel.music.stop();
+                GamePanel.soundEffect.play(1, true);
             }
 
             currentMino.isBlockDeactivating = false;
@@ -93,6 +100,7 @@ public class PlayManager {
         int x = left_x;
         int y = top_y;
         int blockCount = 0;
+        int lineCount = 0;
 
         while (x < right_x && y < bottom_y) {
 
@@ -113,18 +121,41 @@ public class PlayManager {
                         }
                     }
 
+                    lineCount++;
+                    lines++;
+
+                    // Drop speed
+                    if (lines % 10 == 0 && dropInterval > 1) {
+                        level++;
+
+                        if (dropInterval > 10) {
+                            dropInterval -= 10;
+                        } else {
+                            dropInterval -= 1;
+                        }
+                    }
+
                     // line has been deleted -> move down all other blocks
                     for (int i = 0; i < staticBlocks.size(); i++) {
                         if (staticBlocks.get(i).y < y) {
                             staticBlocks.get(i).y += Block.SIZE;
                         }
                     }
+
+                    // play deletion sound effect
+                    GamePanel.soundEffect.play(0, true);
                 }
 
                 blockCount = 0;
                 x = left_x;
                 y += Block.SIZE;
             }
+        }
+
+        // Add score
+        if (lineCount > 0) {
+            int singleLineScore = 10 * level;
+            score += singleLineScore * lineCount;
         }
     }
 
@@ -147,6 +178,12 @@ public class PlayManager {
         graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics2D.drawString("NEXT", x + 60, y +60);
 
+        // Draw scoreboard
+        graphics2D.drawRect(x, top_y, 250, 300);
+        x += 40;
+        graphics2D.drawString("LEVEL: " + level, x, top_y + 90);
+        graphics2D.drawString("LINES: " + lines, x, top_y + 160);
+        graphics2D.drawString("SCORE: " + score, x, top_y + 230);
 
         // Draw the current mino
         if (currentMino != null) {

@@ -10,9 +10,10 @@ public class GamePanel extends JPanel implements Runnable {
     public static int FPS = 60;
 
     Thread gameThread;
+    main.java.PlayManager playManager;
 
-    PlayManager playManager;
-
+    public static main.java.Sound music = new main.java.Sound();
+    public static main.java.Sound soundEffect = new main.java.Sound();
 
     public GamePanel() {
 
@@ -25,13 +26,16 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(new KeyHandler());
         this.setFocusable(true);
 
-        playManager = new PlayManager();
+        playManager = new main.java.PlayManager();
     }
 
 
     public void launchGame() {
         gameThread = new Thread(this);
         gameThread.start();
+
+        music.play(2, true);
+        music.loop();
     }
 
 
@@ -63,7 +67,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     private void update() {
-        if (!KeyHandler.pausePressed) {
+        if (!main.java.KeyHandler.pausePressed && !playManager.gameOver) {
             playManager.update();
         }
     }
