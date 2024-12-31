@@ -6,12 +6,12 @@ Tetris clone implemented using Java Swing.
 
 
 ## Controls
-Down - S or down arrow
-Left - A or left arrow
-Right - D or right arrow
-Rotate Piece - W or up arrow
-Drop tetromino - Space bar
-Pause game - Escape key
+- Down - S or down arrow
+- Left - A or left arrow
+- Right - D or right arrow
+- Rotate Piece - W or up arrow
+- Drop tetromino - Space bar
+- Pause game - Escape key
 
 ## Credits
 Credit for the core design goes to RyiSnow as shown in [this video](https://www.youtube.com/watch?v=N1ktYfszqnM).
