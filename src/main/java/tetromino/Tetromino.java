@@ -6,7 +6,7 @@ import main.java.PlayManager;
 
 import java.awt.*;
 
-public class Tetromino {
+public abstract class Tetromino {
 
     public Block[] b = new Block[4];
     public Block[] tempB = new Block[4];
@@ -148,24 +148,16 @@ public class Tetromino {
     }
 
 
-    public void getDirection1() {
-        // NO-OP
-    }
+    public abstract void getDirection1();
 
 
-    public void getDirection2() {
-        // NO-OP
-    }
+    public abstract void getDirection2();
 
 
-    public void getDirection3() {
-        // NO-OP
-    }
+    public abstract void getDirection3();
 
 
-    public void getDirection4() {
-        // NO-OP
-    }
+    public abstract void getDirection4();
 
 
     public void update() {
