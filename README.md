@@ -18,7 +18,8 @@ Credit for the core design goes to RyiSnow as shown in [this video](https://www.
 
 ## My Additions
 
-Implemented a "drop" function that will drop the tetromino into the lowest position it can go.
+- Implemented a "drop" function that will drop the tetromino into the lowest position it can go.
+- Music can be toggled with 'M' key.
 
 **Projecting Location:**
 <img width="1277" alt="image" src="https://github.com/user-attachments/assets/4aa93511-f77b-4b6e-9f94-1f2a8cb3f74b" />
