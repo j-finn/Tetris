@@ -15,6 +15,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static main.java.Sound music = new main.java.Sound();
     public static main.java.Sound soundEffect = new main.java.Sound();
 
+    public static boolean musicMuted = false;
+
     public GamePanel() {
 
         //Panel settings
@@ -69,6 +71,21 @@ public class GamePanel extends JPanel implements Runnable {
     private void update() {
         if (!main.java.KeyHandler.pausePressed && !playManager.gameOver) {
             playManager.update();
+        }
+
+        if (KeyHandler.mutePressed) {
+
+            if (musicMuted) {
+                music.play(2, true);
+                music.loop();
+
+            } else {
+                music.stop();
+            }
+
+            musicMuted = !musicMuted;
+
+            KeyHandler.mutePressed = false;
         }
     }
 
