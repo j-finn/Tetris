@@ -13,6 +13,7 @@ Tetris clone implemented using Java Swing.
 - Rotate Piece - W or up arrow
 - Drop tetromino - Space bar
 - Pause game - Escape key
+- Toggle music - M key
 
 ## Credits
 Credit for the core design goes to RyiSnow as shown in [this video](https://www.youtube.com/watch?v=N1ktYfszqnM).
