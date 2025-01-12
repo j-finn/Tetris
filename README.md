@@ -1,5 +1,7 @@
 # Tetris
 
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/744fedab-b45a-4cee-995c-3bb159ad4a6e"/>
+
 ## About
 Tetris clone implemented using Java Swing.
 
