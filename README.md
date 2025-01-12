@@ -2,6 +2,7 @@
 
 ## About
 Tetris clone implemented using Java Swing.
+
 <img width="600" alt="image" src="https://github.com/user-attachments/assets/6ab669bf-51d5-4e0b-b2f3-5b79731fd357"/>
 
 
