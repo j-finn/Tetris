@@ -10,6 +10,7 @@ public abstract class Tetromino {
 
     public Block[] b = new Block[4];
     public Block[] tempB = new Block[4];
+    public Block[] droppedB = new Block[4];
 
     int autoDropCounter = 0; // mino drops once this hits the dropInterval
     public int direction = 1; // there are 4 directions (1/2/3/4)
@@ -29,6 +30,11 @@ public abstract class Tetromino {
         tempB[1] = new Block(c);
         tempB[2] = new Block(c);
         tempB[3] = new Block(c);
+
+        droppedB[0] = new Block(c);
+        droppedB[1] = new Block(c);
+        droppedB[2] = new Block(c);
+        droppedB[3] = new Block(c);
     }
 
 
@@ -67,6 +73,31 @@ public abstract class Tetromino {
     }
 
 
+    public Block[] dropBlockForDrawing() {
+
+        // FIXME: This is a bit laggy. Possibly room for performance optimisations?
+        droppedB[0].x = b[0].x;
+        droppedB[0].y = b[0].y;
+        droppedB[1].x = b[1].x;
+        droppedB[1].y = b[1].y;
+        droppedB[2].x = b[2].x;
+        droppedB[2].y = b[2].y;
+        droppedB[3].x = b[3].x;
+        droppedB[3].y = b[3].y;
+
+        while (!bottomCollision) {
+            droppedB[0].y++;
+            droppedB[1].y++;
+            droppedB[2].y++;
+            droppedB[3].y++;
+
+            checkMovementCollision(droppedB);
+        }
+
+        return droppedB;
+    }
+
+
     public void checkMovementCollision(Block[] minoBlock) {
 
         leftCollision = false;
@@ -97,7 +128,7 @@ public abstract class Tetromino {
 
     /**
      * If any of the (x,y) coordinates of the temporary (i.e. rotated)
-     * block are equal to the left/right/bottom edge then we block the rotation.
+     * block are equal to the left/right/bottom edge then we prevent the rotation.
      */
     public void checkRotationCollision() {
         leftCollision = false;

@@ -4,6 +4,8 @@ import main.java.tetromino.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -29,6 +31,7 @@ public class PlayManager {
     final int NEXT_MINO_START_X;
     final int NEXT_MINO_START_Y;
     public static ArrayList<Block> staticBlocks = new ArrayList<>();
+    public static ArrayList<Block> droppedBlockOutlines = new ArrayList<>();
 
     // Others
     public static int dropInterval = 60; // mino drops every 60 frames
@@ -90,6 +93,9 @@ public class PlayManager {
             checkDelete();
 
         } else {
+            droppedBlockOutlines.clear();
+            droppedBlockOutlines.addAll(Arrays.asList(currentMino.dropBlockForDrawing()));
+
             currentMino.update();
         }
     }
@@ -184,6 +190,23 @@ public class PlayManager {
         graphics2D.drawString("LEVEL: " + level, x, top_y + 90);
         graphics2D.drawString("LINES: " + lines, x, top_y + 160);
         graphics2D.drawString("SCORE: " + score, x, top_y + 230);
+
+        List<Block> blockOutlinesToDelete = new ArrayList<>();
+
+            for (int j = 0; j < currentMino.b.length; j++) {
+                for (int i = 0; i < droppedBlockOutlines.size(); i++) {
+                    if (droppedBlockOutlines.get(i).x == currentMino.b[j].x &&
+                        droppedBlockOutlines.get(i).y == currentMino.b[j].y) {
+                        blockOutlinesToDelete.add(droppedBlockOutlines.get(i));
+                    }
+                }
+            }
+
+        droppedBlockOutlines.removeAll(blockOutlinesToDelete);
+
+            for (int i = 0; i < droppedBlockOutlines.size(); i++) {
+                droppedBlockOutlines.get(i).drawOutline(graphics2D);
+            }
 
         // Draw the current mino
         if (currentMino != null) {
