@@ -10,6 +10,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static int FPS = 60;
 
     Thread gameThread;
+//    Thread blockDropThread;
     main.java.PlayManager playManager;
 
     public static main.java.Sound music = new main.java.Sound();
@@ -33,11 +34,26 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public void launchGame() {
-        gameThread = new Thread(this);
-        gameThread.start();
+        startThreads();
 
         music.play(2, true);
         music.loop();
+    }
+
+
+
+    private void startThreads() {
+
+        // TODO: Separate thread for dropping the block?
+//        if (blockDropThread == null) {
+//            blockDropThread = new Thread(this);
+//            blockDropThread.start();
+//        }
+
+        if (gameThread == null) {
+            gameThread = new Thread(this);
+            gameThread.start();
+        }
     }
 
 
@@ -74,21 +90,29 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (KeyHandler.mutePressed) {
-
-            if (musicMuted) {
-                music.play(2, true);
-                music.loop();
-
-            } else {
-                music.stop();
-            }
-
-            musicMuted = !musicMuted;
-
-            KeyHandler.mutePressed = false;
+            toggleMusic();
         }
+
+        // TODO: Not implemented yet.
+//        if (playManager.gameOver && KeyHandler.restartGamePressed) {
+//            launchGame();
+//        }
     }
 
+
+    public void toggleMusic() {
+        if (musicMuted) {
+            music.play(2, true);
+            music.loop();
+
+        } else {
+            music.stop();
+        }
+
+        musicMuted = !musicMuted;
+
+        KeyHandler.mutePressed = false;
+    }
 
     @Override
     public void paintComponent(Graphics graphics) {

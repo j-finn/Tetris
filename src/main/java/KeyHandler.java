@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-  public static boolean upPressed, downPressed, rightPressed, leftPressed, pausePressed, dropPressed, mutePressed;
+  public static boolean upPressed, downPressed, rightPressed, leftPressed, pausePressed, dropPressed, mutePressed, restartGamePressed;
 
 
   @Override
@@ -40,6 +40,11 @@ public class KeyHandler implements KeyListener {
     if (code == KeyEvent.VK_M) {
       mutePressed = true;
     }
+
+    // TODO: Not implemented yet.
+//    if (code == KeyEvent.VK_ENTER) {
+//      restartGamePressed = true;
+//    }
   }
 
 
