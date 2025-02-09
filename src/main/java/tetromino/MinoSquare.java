@@ -28,28 +28,28 @@ public class MinoSquare extends Tetromino {
 
 
   @Override
-  Tetromino getRotatedPosition1() {
+  Tetromino rotatePosition1() {
     // NO-OP
     return this;
   }
 
 
   @Override
-  Tetromino getRotatedPosition2() {
+  Tetromino rotatePosition2() {
     // NO-OP
     return this;
   }
 
 
   @Override
-  Tetromino getRotatedPosition3() {
+  Tetromino rotatePosition3() {
     // NO-OP
     return this;
   }
 
 
   @Override
-  Tetromino getRotatedPosition4() {
+  Tetromino rotatePosition4() {
     // NO-OP
     return this;
   }

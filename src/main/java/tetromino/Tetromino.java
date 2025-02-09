@@ -2,14 +2,12 @@ package main.java.tetromino;
 
 import java.awt.*;
 
-public abstract class Tetromino {
+public abstract class Tetromino implements Cloneable {
 
     Block[] blocks = new Block[4];
-    Block[] tempB = new Block[4];
-    Block[] droppedB = new Block[4];
 
     public int direction = 1; // there are 4 directions (1/2/3/4)
-    private boolean isBlockActive = true;
+    private boolean isMinoActive = true;
     private boolean isBlockDeactivating = false;
 
 
@@ -17,8 +15,10 @@ public abstract class Tetromino {
         return blocks;
     }
 
-    public Block[] getTempB() {
-        return tempB;
+
+    // TODO: Colour to live on the mino? or the block?
+    public Color getMinoColor() {
+        return blocks[0].getColour();
     }
 
     public void create(Color c) {
@@ -26,124 +26,52 @@ public abstract class Tetromino {
         blocks[1] = new Block(c);
         blocks[2] = new Block(c);
         blocks[3] = new Block(c);
+    }
 
-        tempB[0] = new Block(c);
-        tempB[1] = new Block(c);
-        tempB[2] = new Block(c);
-        tempB[3] = new Block(c);
 
-        droppedB[0] = new Block(c);
-        droppedB[1] = new Block(c);
-        droppedB[2] = new Block(c);
-        droppedB[3] = new Block(c);
+    @Override
+    public Tetromino clone() {
+        try {
+            Tetromino clonedTetromino = (Tetromino) super.clone();
+
+            clonedTetromino.blocks = new Block[4];
+            for (int i = 0; i < blocks.length; i++) {
+                clonedTetromino.blocks[i] = new Block(this.blocks[i]);
+            }
+
+            return clonedTetromino;
+        } catch (CloneNotSupportedException e) {
+            // should be impossible but this is a checked exception and I don't want to propagate it
+            throw new IllegalArgumentException(this.getClass() + " does not implement cloneable.");
+        }
     }
 
 
     public abstract void setXY(int x, int y);
 
 
-    public boolean isBlockActive() {
-        return isBlockActive;
+    public boolean isActive() {
+        return isMinoActive;
     }
 
-
-    // TODO Move this to game controller?
-//    public void dropBlock() {
-//
-//        // FIXME: This is a bit laggy. Possibly room for performance optimisations?
-//        tempB[0] = b[0];
-//        tempB[1] = b[1];
-//        tempB[2] = b[2];
-//        tempB[3] = b[3];
-//
-//        while (!bottomCollision) {
-//            tempB[0].y++;
-//            tempB[1].y++;
-//            tempB[2].y++;
-//            tempB[3].y++;
-//
-//            checkMovementCollision(tempB);
-//
-//            if (bottomCollision) {
-//                b[0].y = tempB[0].y;
-//                b[1].y = tempB[1].y;
-//                b[2].y = tempB[2].y;
-//                b[3].y = tempB[3].y;
-//            }
-//        }
-//    }
-
-
-//    public Block[] dropBlockForDrawing() {
-//
-//        // FIXME: This is a bit laggy. Possibly room for performance optimisations?
-//        droppedB[0].x = b[0].x;
-//        droppedB[0].y = b[0].y;
-//        droppedB[1].x = b[1].x;
-//        droppedB[1].y = b[1].y;
-//        droppedB[2].x = b[2].x;
-//        droppedB[2].y = b[2].y;
-//        droppedB[3].x = b[3].x;
-//        droppedB[3].y = b[3].y;
-//
-//        while (!bottomCollision) {
-//            droppedB[0].y++;
-//            droppedB[1].y++;
-//            droppedB[2].y++;
-//            droppedB[3].y++;
-//
-////            checkMovementCollision(droppedB);
-//        }
-//
-//        return droppedB;
-//    }
-
-
-    /**
-     * TODO
-     */
-    public void resetTemp() {
-        tempB[0].x = blocks[0].x;
-        tempB[0].y = blocks[0].y;
-        tempB[1].x = blocks[1].x;
-        tempB[1].y = blocks[1].y;
-        tempB[2].x = blocks[2].x;
-        tempB[2].y = blocks[2].y;
-        tempB[3].x = blocks[3].x;
-        tempB[3].y = blocks[3].y;
+    public void setMinoActive(boolean minoActive) {
+        isMinoActive = minoActive;
     }
 
-    /**
-     * <p>We update the arrays values via a temp array.</p>
-     *
-     */
-    public void rotate() {
-            blocks[0].x = tempB[0].x;
-            blocks[0].y = tempB[0].y;
-            blocks[1].x = tempB[1].x;
-            blocks[1].y = tempB[1].y;
-            blocks[2].x = tempB[2].x;
-            blocks[2].y = tempB[2].y;
-            blocks[3].x = tempB[3].x;
-            blocks[3].y = tempB[3].y;
-
-        direction = (direction % 4) + 1; // 1 -> 2 -> 3 -> 4 -> 1
-    }
-
-
-    /**
-     * Returns the Tetromino with its temp position rotated.
-     */
-    public Tetromino getRotatedPosition() {
+    public Tetromino rotatePosition() {
         switch (direction) {
             case 1:
-                return getRotatedPosition2();
+                direction = (direction % 4) + 1;
+                return rotatePosition2();
             case 2:
-                return getRotatedPosition3();
+                direction = (direction % 4) + 1;
+                return rotatePosition3();
             case 3:
-                return getRotatedPosition4();
+                direction = (direction % 4) + 1;
+                return rotatePosition4();
             case 4:
-                return getRotatedPosition1();
+                direction = (direction % 4) + 1;
+                return rotatePosition1();
             default:
                 throw new IllegalStateException("Rotated position was out of bounds, should be" +
                   "in either 1, 2, 3 or 4, but was: " + direction);
@@ -151,94 +79,47 @@ public abstract class Tetromino {
     }
 
 
-    abstract Tetromino getRotatedPosition1();
+    abstract Tetromino rotatePosition1();
 
 
-    abstract Tetromino getRotatedPosition2();
+    abstract Tetromino rotatePosition2();
 
 
-    abstract Tetromino getRotatedPosition3();
+    abstract Tetromino rotatePosition3();
 
 
-    abstract Tetromino getRotatedPosition4();
+    abstract Tetromino rotatePosition4();
 
 
-    public Tetromino getRightMovePosition() {
-        tempB[0].x = blocks[0].x + Block.SIZE;
-        tempB[0].y = blocks[0].y;
-        tempB[1].x = blocks[0].x + Block.SIZE;
-        tempB[1].y = blocks[0].y;
-        tempB[2].x = blocks[0].x + Block.SIZE;
-        tempB[2].y = blocks[0].y;
-        tempB[3].x = blocks[0].x + Block.SIZE;
-        tempB[3].y = blocks[0].y;
+    public Tetromino moveRight() {
+        blocks[0].setX(blocks[0].getBlockX() + Block.SIZE);
+        blocks[1].setX(blocks[1].getBlockX() + Block.SIZE);
+        blocks[2].setX(blocks[2].getBlockX() + Block.SIZE);
+        blocks[3].setX(blocks[3].getBlockX() + Block.SIZE);
 
         return this;
     }
 
 
-    public Tetromino getLeftMovePosition() {
-        tempB[0].x = blocks[0].x - Block.SIZE;
-        tempB[0].y = blocks[0].y;
-        tempB[1].x = blocks[0].x - Block.SIZE;
-        tempB[1].y = blocks[0].y;
-        tempB[2].x = blocks[0].x - Block.SIZE;
-        tempB[2].y = blocks[0].y;
-        tempB[3].x = blocks[0].x - Block.SIZE;
-        tempB[3].y = blocks[0].y;
+    public Tetromino moveLeft() {
+        blocks[0].setX(blocks[0].getBlockX() - Block.SIZE);
+        blocks[1].setX(blocks[1].getBlockX() - Block.SIZE);
+        blocks[2].setX(blocks[2].getBlockX() - Block.SIZE);
+        blocks[3].setX(blocks[3].getBlockX() - Block.SIZE);
 
         return this;
     }
 
 
-    public Tetromino getDownMovePosition() {
-        tempB[0].x = blocks[0].x;
-        tempB[0].y = blocks[0].y + Block.SIZE;
-        tempB[1].x = blocks[0].x;
-        tempB[1].y = blocks[0].y + Block.SIZE;
-        tempB[2].x = blocks[0].x;
-        tempB[2].y = blocks[0].y + Block.SIZE;
-        tempB[3].x = blocks[0].x;
-        tempB[3].y = blocks[0].y + Block.SIZE;
+    public Tetromino moveDown() {
+        blocks[0].setY(blocks[0].getBlockY() + Block.SIZE);
+        blocks[1].setY(blocks[1].getBlockY() + Block.SIZE);
+        blocks[2].setY(blocks[2].getBlockY() + Block.SIZE);
+        blocks[3].setY(blocks[3].getBlockY() + Block.SIZE);
 
         return this;
     }
 
-
-    public void moveRight() {
-        blocks[0].x = blocks[0].x + Block.SIZE;
-        blocks[1].x = blocks[1].x + Block.SIZE;
-        blocks[2].x = blocks[2].x + Block.SIZE;
-        blocks[3].x = blocks[3].x + Block.SIZE;
-    }
-
-
-    public void moveLeft() {
-        blocks[0].x = blocks[0].x - Block.SIZE;
-        blocks[1].x = blocks[1].x - Block.SIZE;
-        blocks[2].x = blocks[2].x - Block.SIZE;
-        blocks[3].x = blocks[3].x - Block.SIZE;
-    }
-
-
-    public void moveDown() {
-        blocks[0].y = blocks[0].y + Block.SIZE;
-        blocks[1].y = blocks[1].y + Block.SIZE;
-        blocks[2].y = blocks[2].y + Block.SIZE;
-        blocks[3].y = blocks[3].y + Block.SIZE;
-    }
-
-
-
-    public void draw(Graphics2D graphics2D) {
-
-        int margin = 2; // for black outline
-        graphics2D.setColor(blocks[0].colour);
-        graphics2D.fillRect(blocks[0].x + margin, blocks[0].y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-        graphics2D.fillRect(blocks[1].x + margin, blocks[1].y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-        graphics2D.fillRect(blocks[2].x + margin, blocks[2].y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-        graphics2D.fillRect(blocks[3].x + margin, blocks[3].y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-    }
 
     public boolean isBlockDeactivating() {
         return isBlockDeactivating;

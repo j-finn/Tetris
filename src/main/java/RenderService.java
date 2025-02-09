@@ -1,5 +1,8 @@
 package main.java;
 
+import main.java.tetromino.Block;
+import main.java.tetromino.Tetromino;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -53,12 +56,12 @@ public class RenderService extends JPanel {
 
     // Draw the current mino
     if (gameModel.getCurrentMino() != null) {
-      gameModel.getCurrentMino().draw(graphics2D);
+      drawTetromino(graphics2D, gameModel.getCurrentMino());
     }
 
     // Draw the next mino
     if (gameModel.getNextMino() != null) {
-      gameModel.getNextMino().draw(graphics2D);
+      drawTetromino(graphics2D, gameModel.getNextMino());
     }
 
     for (int i = 0; i < gameModel.getStaticBlocks().size(); i++) {
@@ -71,6 +74,16 @@ public class RenderService extends JPanel {
 
     if (gameModel.isGamePaused()) {
       drawGamePaused(graphics2D);
+    }
+  }
+
+
+  public void drawTetromino(Graphics2D graphics2D, Tetromino tetromino) {
+    int margin = 2; // for black outline
+    graphics2D.setColor(tetromino.getMinoColor());
+
+    for (Block block : tetromino.getBlocks()) {
+      graphics2D.fillRect(block.getBlockX() + margin, block.getBlockY() + margin, Block.SIZE - (margin * 2), Block.SIZE - (margin * 2));
     }
   }
 

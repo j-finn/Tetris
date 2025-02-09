@@ -52,7 +52,7 @@ public class GameModel {
     this.staticBlocks = new ArrayList<>();
 
     //Main play area frame
-    LEFT_BOUNDARY = (WINDOW_WIDTH - PLAY_AREA_WIDTH) / 2; // (1280 - 360)/2 = 460 (i.e. divide the extra space evenly
+    LEFT_BOUNDARY = ((WINDOW_WIDTH - PLAY_AREA_WIDTH) / 2); // (1280 - 360)/2 = 460 (i.e. divide the extra space evenly
     RIGHT_BOUNDARY = LEFT_BOUNDARY + PLAY_AREA_WIDTH;
     TOP_BOUNDARY = 50;
     BOTTOM_BOUNDARY = TOP_BOUNDARY + PLAY_AREA_HEIGHT;
