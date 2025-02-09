@@ -1,50 +1,65 @@
 package main.java;
 
+import main.GameActionListener;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-  public static boolean upPressed, downPressed, rightPressed, leftPressed, pausePressed, dropPressed, mutePressed, restartGamePressed;
+  GameActionListener gameActionListener;
 
+  public KeyHandler(GameActionListener gameActionListener) {
+    this.gameActionListener = gameActionListener;
+  }
 
   @Override
   public void keyPressed(KeyEvent e) {
+    GameAction action = translateKeyEvent(e);
 
-    int code = e.getKeyCode();
+    if (action != null && gameActionListener != null) {
+      gameActionListener.handleGameAction(action);
+    }
+  }
+
+
+  private GameAction translateKeyEvent(KeyEvent keyEvent) {
+    int code = keyEvent.getKeyCode();
 
     if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-      upPressed = true;
+      return GameAction.ROTATE;
     }
 
     if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
-      rightPressed = true;
+      return GameAction.MOVE_RIGHT;
     }
 
     if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
-      leftPressed = true;
+      return GameAction.MOVE_LEFT;
     }
 
     if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-      downPressed = true;
+      return GameAction.MOVE_DOWN;
     }
 
     if (code == KeyEvent.VK_ESCAPE) {
-      pausePressed = !pausePressed; // toggle pause
+      return GameAction.PAUSE;
     }
 
     if (code == KeyEvent.VK_SPACE) {
-      dropPressed = true;
+      return GameAction.DROP;
     }
 
     if (code == KeyEvent.VK_M) {
-      mutePressed = true;
+      return GameAction.MUTE;
     }
 
     // TODO: Not implemented yet.
 //    if (code == KeyEvent.VK_ENTER) {
 //      restartGamePressed = true;
 //    }
+
+    return null;
   }
 
 
