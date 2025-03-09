@@ -121,6 +121,16 @@ public abstract class Tetromino implements Cloneable {
     }
 
 
+    public Tetromino moveUp() {
+        blocks[0].setY(blocks[0].getBlockY() - Block.SIZE);
+        blocks[1].setY(blocks[1].getBlockY() - Block.SIZE);
+        blocks[2].setY(blocks[2].getBlockY() - Block.SIZE);
+        blocks[3].setY(blocks[3].getBlockY() - Block.SIZE);
+
+        return this;
+    }
+
+
     public boolean isBlockDeactivating() {
         return isBlockDeactivating;
     }

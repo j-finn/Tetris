@@ -26,6 +26,7 @@ public class GameController implements Runnable, GameActionListener {
   TetrominoGeneratorService tetrominoGeneratorService;
   RenderService renderService;
   CollisionService collisionService;
+  LineClearingService lineClearingService;
 
   //-------------
   // SOUND
@@ -38,11 +39,13 @@ public class GameController implements Runnable, GameActionListener {
   public GameController(RenderService renderService,
                         GameModel gameModel,
                         TetrominoGeneratorService tetrominoGeneratorService,
-                        CollisionService collisionService) {
+                        CollisionService collisionService,
+                        LineClearingService lineClearingService) {
     this.renderService = renderService;
     this.tetrominoGeneratorService = tetrominoGeneratorService;
     this.gameModel = gameModel;
     this.collisionService = collisionService;
+    this.lineClearingService = lineClearingService;
 
     // initialise mino
     gameModel.setCurrentMino(tetrominoGeneratorService.pickRandomTetromino());
@@ -63,7 +66,8 @@ public class GameController implements Runnable, GameActionListener {
     TetrominoGeneratorService tetrominoGeneratorService = new TetrominoGeneratorService();
     RenderService renderService = new RenderService(gameModel);
     CollisionService collisionService = new CollisionService(gameModel);
-    GameController gameController = new GameController(renderService, gameModel, tetrominoGeneratorService, collisionService);
+    LineClearingService lineClearingService = new LineClearingService();
+    GameController gameController = new GameController(renderService, gameModel, tetrominoGeneratorService, collisionService, lineClearingService);
 
     KeyHandler keyHandler = new KeyHandler(gameController);
 
@@ -94,7 +98,9 @@ public class GameController implements Runnable, GameActionListener {
         moveLeft();
         break;
       case MOVE_DOWN:
-        hasHitBottom();
+        if (!hasHitBottom()) {
+          moveDown();
+        }
         break;
       case ROTATE:
         rotate();
@@ -158,9 +164,14 @@ public class GameController implements Runnable, GameActionListener {
 
 
   public void drop() {
-    while (!hasHitBottom()) {
-      moveDown();
+    Tetromino copyMino = gameModel.getCurrentMino().clone();
+
+    while (!collisionService.checkMovementCollision(copyMino)) {
+      copyMino.moveDown();
     }
+
+    // cloned mino has collided, shift back up to valid position and set as our current mino
+    gameModel.setCurrentMino(copyMino.moveUp());
   }
 
 
@@ -241,7 +252,7 @@ public class GameController implements Runnable, GameActionListener {
       if (hasHitBottom()) {
         gameModel.getCurrentMino().setBlockDeactivating(true);
       } else {
-        if (autoDropCounter == GameController.dropInterval) {
+        if (autoDropCounter >= GameController.dropInterval) {
           moveDown();
         }
       }
@@ -253,14 +264,6 @@ public class GameController implements Runnable, GameActionListener {
       gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[2]);
       gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[3]);
 
-      if (gameModel.getCurrentMino().getBlocks()[0].x == gameModel.getMinoStartX()
-        && gameModel.getCurrentMino().getBlocks()[0].y == gameModel.getMinoStartY()) {
-        // means that block has collided immediately
-        gameModel.setGameOver(true);
-        music.stop();
-//                soundEffect.play(1, true);
-      }
-
       gameModel.getCurrentMino().setBlockDeactivating(false);
 
       // Replace current mino with next mino
@@ -269,78 +272,36 @@ public class GameController implements Runnable, GameActionListener {
       gameModel.setNextMino(tetrominoGeneratorService.pickRandomTetromino());
       gameModel.getNextMino().setXY(gameModel.getNextMinoStartX(), gameModel.getNextMinoStartY());
 
-      checkDelete();
-    }
+      // instant collision on spawn -> game over
+      if (hasHitBottom()) {
+        gameModel.setGameOver(true);
+        music.stop();
+        //                soundEffect.play(1, true);
+      }
+
+      int numberOfDeletedLines = lineClearingService.checkDelete(gameModel.getStaticBlocks());
+
+      // Add score
+      // FIXME: Score is broken now, game speeds up too quickly and level does not get incremented
+      if (numberOfDeletedLines > 0) {
+        int singleLineScore = 10 * gameModel.getLevel();
+        gameModel.setScore(gameModel.getScore() + singleLineScore * numberOfDeletedLines);
+
+        // Drop speed
+        if (gameModel.getLines() % 10 == 0 && dropInterval > 1) {
+          gameModel.setLevel(gameModel.getLevel() + 1);
+
+          if (dropInterval > 10) {
+            dropInterval -= 10;
+          } else {
+            dropInterval -= 1;
+          }
+        }
 
 //            droppedBlockOutlines.clear();
 //            droppedBlockOutlines.addAll(Arrays.asList(currentMino.dropBlockForDrawing()));
-
-
 //            update();
-  }
-
-
-  private void checkDelete() {
-
-    int x = gameModel.getLeftBoundary();
-    int y = gameModel.getTopBoundary();
-    int blockCount = 0;
-    int lineCount = 0;
-
-    while (x < gameModel.getRightBoundary() && y < gameModel.getBottomBoundary()) {
-
-      for (int i = 0; i < gameModel.getStaticBlocks().size(); i++) {
-        if (gameModel.getStaticBlocks().get(i).x == x && gameModel.getStaticBlocks().get(i).y == y) {
-          blockCount++;
-        }
       }
-
-      x += Block.SIZE;
-
-      if (x == gameModel.getRightBoundary()) {
-        if (blockCount == 12) {
-
-          for (int i = (gameModel.getStaticBlocks().size() - 1); i > -1; i--) {
-            if (gameModel.getStaticBlocks().get(i).y == y) {
-              gameModel.getStaticBlocks().remove(i);
-            }
-          }
-
-          lineCount++;
-          gameModel.setLines(gameModel.getLines() + 1);
-
-          // Drop speed
-          if (gameModel.getLines() % 10 == 0 && dropInterval > 1) {
-            gameModel.setLevel(gameModel.getLevel() + 1);
-
-            if (dropInterval > 10) {
-              dropInterval -= 10;
-            } else {
-              dropInterval -= 1;
-            }
-          }
-
-          // line has been deleted -> move down all other blocks
-          for (int i = 0; i < gameModel.getStaticBlocks().size(); i++) {
-            if (gameModel.getStaticBlocks().get(i).y < y) {
-              gameModel.getStaticBlocks().get(i).y += Block.SIZE;
-            }
-          }
-
-          // play deletion sound effect
-//                    GamePanel.soundEffect.play(0, true);
-        }
-
-        blockCount = 0;
-        x = gameModel.getLeftBoundary();
-        y += Block.SIZE;
-      }
-    }
-
-    // Add score
-    if (lineCount > 0) {
-      int singleLineScore = 10 * gameModel.getLevel();
-      gameModel.setScore(gameModel.getScore() + singleLineScore * lineCount);
     }
   }
 }

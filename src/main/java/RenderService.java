@@ -6,6 +6,9 @@ import main.java.tetromino.Tetromino;
 import javax.swing.*;
 import java.awt.*;
 
+import static main.java.GameConfiguration.PLAY_AREA_HEIGHT;
+import static main.java.GameConfiguration.PLAY_AREA_WIDTH;
+
 /**
  * Responsible for drawing.
  */
@@ -97,8 +100,8 @@ public class RenderService extends JPanel {
     graphics2D.drawRect(
       gameModel.getLeftBoundary() - 4,
       gameModel.getTopBoundary() - 4,
-      gameModel.PLAY_AREA_WIDTH + 8,
-      gameModel.PLAY_AREA_HEIGHT + 8);
+      PLAY_AREA_WIDTH + 8,
+      PLAY_AREA_HEIGHT + 8);
   }
 
 

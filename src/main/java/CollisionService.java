@@ -69,7 +69,7 @@ public class CollisionService {
         return true;
       }
 
-      if (block.y == gameModel.getBottomBoundary()/* - Block.SIZE*/) { // FIXME: Adjustment shouldn't be required
+      if (block.y == gameModel.getBottomBoundary()) {
         // Likewise, y coordinate of block is the top. We shift the boundary up and check for equality.
         // If we get a match, then we know the bottom of the block is touching the boundary.
         return true;

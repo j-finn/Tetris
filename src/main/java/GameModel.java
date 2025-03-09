@@ -5,7 +5,7 @@ import main.java.tetromino.Tetromino;
 
 import java.util.ArrayList;
 
-import static main.java.GameConfiguration.WINDOW_WIDTH;
+import static main.java.GameConfiguration.*;
 
 /**
  * Stores data about the game:
@@ -22,22 +22,23 @@ public class GameModel {
 
   private ArrayList<Block> staticBlocks;
 
-  private int LEFT_BOUNDARY;
-  private int RIGHT_BOUNDARY;
-  private int TOP_BOUNDARY;
-  private int BOTTOM_BOUNDARY;
-
-  final int PLAY_AREA_WIDTH = 360; // block is 30px, so 12 fit horizontally
-  final int PLAY_AREA_HEIGHT = 600; // ... and 20 fit vertically
+  //Main play area frame
+  public static int LEFT_BOUNDARY = ((WINDOW_WIDTH - PLAY_AREA_WIDTH) / 2); // (1280 - 360)/2 = 460 (i.e. divide the extra space evenly
+  public static int RIGHT_BOUNDARY = LEFT_BOUNDARY + PLAY_AREA_WIDTH;
+  public static int TOP_BOUNDARY = 50;
+  public static int BOTTOM_BOUNDARY = TOP_BOUNDARY + PLAY_AREA_HEIGHT;
 
   private Tetromino currentMino;
   private int deactivateCounter;
   private Tetromino nextMino;
 
-  private final int MINO_START_X;
-  private final int MINO_START_Y;
-  private final int NEXT_MINO_START_X;
-  private final int NEXT_MINO_START_Y;
+  // Initialise mino start position
+  private static final int MINO_START_X = LEFT_BOUNDARY + (PLAY_AREA_WIDTH / 2) - Block.SIZE;
+  private static final int MINO_START_Y = TOP_BOUNDARY + Block.SIZE;
+
+  // Initialise next mino start position
+  private static final int NEXT_MINO_START_X = RIGHT_BOUNDARY + 175;
+  private static final int NEXT_MINO_START_Y = TOP_BOUNDARY + 500;
 
   private boolean gamePaused;
   private boolean gameOver;
@@ -50,21 +51,6 @@ public class GameModel {
 
   public GameModel() {
     this.staticBlocks = new ArrayList<>();
-
-    //Main play area frame
-    LEFT_BOUNDARY = ((WINDOW_WIDTH - PLAY_AREA_WIDTH) / 2); // (1280 - 360)/2 = 460 (i.e. divide the extra space evenly
-    RIGHT_BOUNDARY = LEFT_BOUNDARY + PLAY_AREA_WIDTH;
-    TOP_BOUNDARY = 50;
-    BOTTOM_BOUNDARY = TOP_BOUNDARY + PLAY_AREA_HEIGHT;
-
-    // initialise mino start position
-    MINO_START_X = LEFT_BOUNDARY + (PLAY_AREA_WIDTH / 2) - Block.SIZE;
-    MINO_START_Y = TOP_BOUNDARY + Block.SIZE;
-
-    // initialise next mino start position
-    NEXT_MINO_START_X = RIGHT_BOUNDARY + 175;
-    NEXT_MINO_START_Y = TOP_BOUNDARY + 500;
-
     this.gamePaused = false;
     this.deactivateCounter = 0;
   }
