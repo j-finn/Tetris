@@ -17,17 +17,16 @@ public class MinoL1 extends Tetromino {
     }
 
 
-
     @Override
     public void setXY(int x, int y) {
-        b[0].x = x;
-        b[0].y = y;
-        b[1].x = b[0].x;
-        b[1].y = b[0].y - Block.SIZE;
-        b[2].x = b[0].x;
-        b[2].y = b[0].y + Block.SIZE;
-        b[3].x = b[0].x + Block.SIZE;
-        b[3].y = b[0].y + Block.SIZE;
+        blocks[0].x = x;
+        blocks[0].y = y;
+        blocks[1].x = blocks[0].x;
+        blocks[1].y = blocks[0].y - Block.SIZE;
+        blocks[2].x = blocks[0].x;
+        blocks[2].y = blocks[0].y + Block.SIZE;
+        blocks[3].x = blocks[0].x + Block.SIZE;
+        blocks[3].y = blocks[0].y + Block.SIZE;
     }
 
     /**
@@ -35,17 +34,16 @@ public class MinoL1 extends Tetromino {
      *    0
      *    2 3
      */
-    public void getDirection1() {
-        tempB[0].x = b[0].x;
-        tempB[0].y = b[0].y;
-        tempB[1].x = b[0].x;
-        tempB[1].y = b[0].y - Block.SIZE;
-        tempB[2].x = b[0].x;
-        tempB[2].y = b[0].y + Block.SIZE;
-        tempB[3].x = b[0].x + Block.SIZE;
-        tempB[3].y = b[0].y + Block.SIZE;
+    @Override
+    Tetromino rotatePosition1() {
+        blocks[1].x = blocks[0].x;
+        blocks[1].y = blocks[0].y - Block.SIZE;
+        blocks[2].x = blocks[0].x;
+        blocks[2].y = blocks[0].y + Block.SIZE;
+        blocks[3].x = blocks[0].x + Block.SIZE;
+        blocks[3].y = blocks[0].y + Block.SIZE;
 
-        updateXY(1);
+        return this;
     }
 
 
@@ -53,17 +51,16 @@ public class MinoL1 extends Tetromino {
      * 2 0 1
      * 3
      */
-    public void getDirection2() {
-        tempB[0].x = b[0].x;
-        tempB[0].y = b[0].y;
-        tempB[1].x = b[0].x + Block.SIZE;
-        tempB[1].y = b[0].y;
-        tempB[2].x = b[0].x - Block.SIZE;
-        tempB[2].y = b[0].y;
-        tempB[3].x = b[0].x - Block.SIZE;
-        tempB[3].y = b[0].y + Block.SIZE;
+    @Override
+    Tetromino rotatePosition2() {
+        blocks[1].x = blocks[0].x + Block.SIZE;
+        blocks[1].y = blocks[0].y;
+        blocks[2].x = blocks[0].x - Block.SIZE;
+        blocks[2].y = blocks[0].y;
+        blocks[3].x = blocks[0].x - Block.SIZE;
+        blocks[3].y = blocks[0].y + Block.SIZE;
 
-        updateXY(2);
+        return this;
     }
 
 
@@ -72,17 +69,16 @@ public class MinoL1 extends Tetromino {
      *   0
      *   1
      */
-    public void getDirection3() {
-        tempB[0].x = b[0].x;
-        tempB[0].y = b[0].y;
-        tempB[1].x = b[0].x;
-        tempB[1].y = b[0].y + Block.SIZE;
-        tempB[2].x = b[0].x;
-        tempB[2].y = b[0].y - Block.SIZE;
-        tempB[3].x = b[0].x - Block.SIZE;
-        tempB[3].y = b[0].y - Block.SIZE;
+    @Override
+    Tetromino rotatePosition3() {
+        blocks[1].x = blocks[0].x;
+        blocks[1].y = blocks[0].y + Block.SIZE;
+        blocks[2].x = blocks[0].x;
+        blocks[2].y = blocks[0].y - Block.SIZE;
+        blocks[3].x = blocks[0].x - Block.SIZE;
+        blocks[3].y = blocks[0].y - Block.SIZE;
 
-        updateXY(3);
+        return this;
     }
 
 
@@ -90,16 +86,15 @@ public class MinoL1 extends Tetromino {
      *     3
      * 1 0 2
      */
-    public void getDirection4() {
-        tempB[0].x = b[0].x;
-        tempB[0].y = b[0].y;
-        tempB[1].x = b[0].x - Block.SIZE;
-        tempB[1].y = b[0].y;
-        tempB[2].x = b[0].x + Block.SIZE;
-        tempB[2].y = b[0].y;
-        tempB[3].x = b[0].x + Block.SIZE;
-        tempB[3].y = b[0].y - Block.SIZE;
+    @Override
+    Tetromino rotatePosition4() {
+        blocks[1].x = blocks[0].x - Block.SIZE;
+        blocks[1].y = blocks[0].y;
+        blocks[2].x = blocks[0].x + Block.SIZE;
+        blocks[2].y = blocks[0].y;
+        blocks[3].x = blocks[0].x + Block.SIZE;
+        blocks[3].y = blocks[0].y - Block.SIZE;
 
-        updateXY(4);
+        return this;
     }
 }

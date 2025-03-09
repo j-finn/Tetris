@@ -3,15 +3,24 @@ package main.java.tetromino;
 import java.awt.*;
 import java.util.Objects;
 
-public class Block extends Rectangle {
+public class Block extends Rectangle implements Cloneable {
 
-    public int x, y;
+    public int x, y; // FIXME: Make private.
     public static final int SIZE = 30; // 30x30 block
-    public Color colour;
+    private Color colour;
 
 
     public Block(Color colour) {
         this.colour = colour;
+    }
+
+
+    public Block(Block other) {
+        this.x = other.x;
+        this.y = other.y;
+        this.width = other.width;
+        this.height = other.height;
+        this.colour = other.colour;
     }
 
 
@@ -37,6 +46,30 @@ public class Block extends Rectangle {
         graphics2D.fillRect(x + margin, y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
     }
 
+
+    public Color getColour() {
+        return colour;
+    }
+
+
+    public int getBlockX() {
+        return x;
+    }
+
+
+    public int getBlockY() {
+        return y;
+    }
+
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+
+    public void setY(int y) {
+        this.y = y;
+    }
 
     @Override
     public boolean equals(Object o) {
