@@ -229,11 +229,15 @@ public class GameController implements Runnable, GameActionListener {
   public void deactivating() {
     gameModel.setDeactivateCounter(gameModel.getDeactivateCounter() + 1);
 
-    // wait 45 frames until deactivating
+    // wait 30 frames until deactivating
     if (gameModel.getDeactivateCounter() == 45) {
-      gameModel.getCurrentMino().setMinoActive(false);
-      gameModel.setDeactivateCounter(0);
-      collisionService.checkMovementCollision(gameModel.getCurrentMino()); // check bottom is still touching
+      // check bottom is still touching
+      if (hasHitBottom()) {
+        gameModel.getCurrentMino().setMinoActive(false);
+        gameModel.setDeactivateCounter(0);
+      } else {
+        gameModel.setDeactivateCounter(0);
+      }
     }
   }
 
@@ -282,10 +286,11 @@ public class GameController implements Runnable, GameActionListener {
       int numberOfDeletedLines = lineClearingService.checkDelete(gameModel.getStaticBlocks());
 
       // Add score
-      // FIXME: Score is broken now, game speeds up too quickly and level does not get incremented
       if (numberOfDeletedLines > 0) {
         int singleLineScore = 10 * gameModel.getLevel();
         gameModel.setScore(gameModel.getScore() + singleLineScore * numberOfDeletedLines);
+
+        gameModel.setLines(gameModel.getLines() + 1);
 
         // Drop speed
         if (gameModel.getLines() % 10 == 0 && dropInterval > 1) {
