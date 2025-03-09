@@ -1,7 +1,5 @@
 package main.java;
 
-import main.GameActionListener;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

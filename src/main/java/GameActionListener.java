@@ -1,7 +1,4 @@
-package main;
-
-import main.java.GameAction;
-import main.java.GameController;
+package main.java;
 
 
 /**

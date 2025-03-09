@@ -3,12 +3,12 @@ package main.java;
 import javax.sound.sampled.*;
 import java.net.URL;
 
-public class Sound {
+public class SoundService {
 
   Clip musicClip;
   URL url[] = new URL[10];
 
-  public Sound() {
+  public SoundService() {
 
     url[0] = getClass().getResource("/delete_line.wav");
     url[1] = getClass().getResource("/zelda_game_over_theme.wav");

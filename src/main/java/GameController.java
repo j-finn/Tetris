@@ -1,6 +1,5 @@
 package main.java;
 
-import main.GameActionListener;
 import main.java.tetromino.Block;
 import main.java.tetromino.Tetromino;
 
@@ -31,7 +30,7 @@ public class GameController implements Runnable, GameActionListener {
   //-------------
   // SOUND
   //-------------
-  public static main.java.Sound music = new main.java.Sound();
+  public static SoundService music = new SoundService();
   //    public static main.java.Sound soundEffect = new main.java.Sound(); // TODO Re-implement
   public static boolean musicMuted = false;
 
@@ -95,7 +94,7 @@ public class GameController implements Runnable, GameActionListener {
         moveLeft();
         break;
       case MOVE_DOWN:
-        moveDown();
+        hasHitBottom();
         break;
       case ROTATE:
         rotate();
@@ -104,7 +103,7 @@ public class GameController implements Runnable, GameActionListener {
         gameModel.togglePause();
         break;
       case DROP:
-        // TODO
+        drop();
         break;
       case MUTE:
         toggleMusic();
@@ -145,19 +144,23 @@ public class GameController implements Runnable, GameActionListener {
   }
 
 
-  public boolean moveDown() {
+  public boolean hasHitBottom() {
     Tetromino copyMino = gameModel.getCurrentMino().clone();
+    return collisionService.checkMovementCollision(copyMino.moveDown());
+  }
 
-    boolean hasCollided = collisionService.checkMovementCollision(copyMino.moveDown());
 
-    if (!hasCollided) {
-      gameModel.getCurrentMino().moveDown();
+  public void moveDown() {
+    gameModel.getCurrentMino().moveDown();
 
-      // reset drop counter
-      autoDropCounter = 0;
+    autoDropCounter = 0; // reset drop counter
+  }
 
+
+  public void drop() {
+    while (!hasHitBottom()) {
+      moveDown();
     }
-      return hasCollided;
   }
 
 
@@ -233,43 +236,41 @@ public class GameController implements Runnable, GameActionListener {
       deactivating();
     }
 
-
-    // FIXME: Something I have changed around here has made the game run very quickly.
     if (gameModel.getCurrentMino().isActive()) {
-      if (moveDown()) {
+
+      if (hasHitBottom()) {
         gameModel.getCurrentMino().setBlockDeactivating(true);
       } else {
-        autoDropCounter++; // counter increases every frame
-
         if (autoDropCounter == GameController.dropInterval) {
           moveDown();
         }
       }
+      autoDropCounter++; // counter increases every frame
 
-      } else {
-        gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[0]);
-        gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[1]);
-        gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[2]);
-        gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[3]);
+    } else {
+      gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[0]);
+      gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[1]);
+      gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[2]);
+      gameModel.getStaticBlocks().add(gameModel.getCurrentMino().getBlocks()[3]);
 
-        if (gameModel.getCurrentMino().getBlocks()[0].x == gameModel.getMinoStartX()
-          && gameModel.getCurrentMino().getBlocks()[0].y == gameModel.getMinoStartY()) {
-          // means that block has collided immediately
-          gameModel.setGameOver(true);
-          music.stop();
+      if (gameModel.getCurrentMino().getBlocks()[0].x == gameModel.getMinoStartX()
+        && gameModel.getCurrentMino().getBlocks()[0].y == gameModel.getMinoStartY()) {
+        // means that block has collided immediately
+        gameModel.setGameOver(true);
+        music.stop();
 //                soundEffect.play(1, true);
-        }
-
-        gameModel.getCurrentMino().setBlockDeactivating(false);
-
-        // Replace current mino with next mino
-        gameModel.setCurrentMino(gameModel.getNextMino());
-        gameModel.getCurrentMino().setXY(gameModel.getMinoStartX(), gameModel.getMinoStartY());
-        gameModel.setNextMino(tetrominoGeneratorService.pickRandomTetromino());
-        gameModel.getNextMino().setXY(gameModel.getNextMinoStartX(), gameModel.getNextMinoStartY());
-
-        checkDelete();
       }
+
+      gameModel.getCurrentMino().setBlockDeactivating(false);
+
+      // Replace current mino with next mino
+      gameModel.setCurrentMino(gameModel.getNextMino());
+      gameModel.getCurrentMino().setXY(gameModel.getMinoStartX(), gameModel.getMinoStartY());
+      gameModel.setNextMino(tetrominoGeneratorService.pickRandomTetromino());
+      gameModel.getNextMino().setXY(gameModel.getNextMinoStartX(), gameModel.getNextMinoStartY());
+
+      checkDelete();
+    }
 
 //            droppedBlockOutlines.clear();
 //            droppedBlockOutlines.addAll(Arrays.asList(currentMino.dropBlockForDrawing()));
