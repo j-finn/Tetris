@@ -3,10 +3,16 @@ package main.java.tetromino;
 import java.awt.*;
 
 /**
+ * Shape:
  * 0 1
  * 2 3
  */
 public class MinoSquare extends Tetromino {
+
+
+  static int[][] rotationOffsets = {
+    {0, 0, 1, 0, 0, 1, 1, 1}, // Rotation state 1
+  };
 
 
   public MinoSquare() {
@@ -16,40 +22,15 @@ public class MinoSquare extends Tetromino {
 
   @Override
   public void setXY(int x, int y) {
-    blocks[0].x = x;
-    blocks[0].y = y;
-    blocks[1].x = blocks[0].x + Block.SIZE;
-    blocks[1].y = blocks[0].y;
-    blocks[2].x = blocks[0].x;
-    blocks[2].y = blocks[0].y + Block.SIZE;
-    blocks[3].x = blocks[0].x + Block.SIZE;
-    blocks[3].y = blocks[0].y + Block.SIZE;
+    for (int i = 0; i < blocks.length; i++) {
+      blocks[i].setBlockX(x + rotationOffsets[0][i * 2] * Block.SIZE);
+      blocks[i].setBlockY(y + rotationOffsets[0][i * 2 + 1] * Block.SIZE);
+    }
   }
 
 
   @Override
-  Tetromino rotatePosition1() {
-    // NO-OP
-    return this;
-  }
-
-
-  @Override
-  Tetromino rotatePosition2() {
-    // NO-OP
-    return this;
-  }
-
-
-  @Override
-  Tetromino rotatePosition3() {
-    // NO-OP
-    return this;
-  }
-
-
-  @Override
-  Tetromino rotatePosition4() {
+  Tetromino rotateToPosition(int number) {
     // NO-OP
     return this;
   }

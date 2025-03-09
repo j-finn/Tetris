@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Block extends Rectangle implements Cloneable {
 
-    public int x, y; // FIXME: Make private.
+    public int x, y;
     public static final int SIZE = 30; // 30x30 block
     private Color colour;
 
@@ -62,14 +62,15 @@ public class Block extends Rectangle implements Cloneable {
     }
 
 
-    public void setX(int x) {
+    public void setBlockX(int x) {
         this.x = x;
     }
 
 
-    public void setY(int y) {
+    public void setBlockY(int y) {
         this.y = y;
     }
+
 
     @Override
     public boolean equals(Object o) {

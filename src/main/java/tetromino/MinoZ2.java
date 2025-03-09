@@ -2,83 +2,45 @@ package main.java.tetromino;
 
 import java.awt.*;
 
+/**
+ * Shape:
+ *   1
+ *   0 2
+ *     3
+ */
 public class MinoZ2 extends Tetromino {
+
+
+  static int[][] rotationOffsets = {
+    {0, 0, 0, -1, 1, 0, 1, 1}, // Rotation state 1
+    {0, 0, 1, 0, 0, 1, -1, 1}, // Rotation state 2
+    {0, 0, 0, 1, -1, 0, -1, -1}, // Rotation state 3
+    {0, 0, -1, 0, 0, -1, 1, -1}  // Rotation state 4
+  };
+
 
   public MinoZ2() {
     create(Color.GREEN);
   }
 
 
-  /**
-   *   1
-   *   0 2
-   *     3
-   */
   @Override
   public void setXY(int x, int y) {
-    blocks[0].x = x;
-    blocks[0].y = y;
-    blocks[1].x = blocks[0].x;
-    blocks[1].y = blocks[0].y - Block.SIZE;
-    blocks[2].x = blocks[0].x + Block.SIZE;
-    blocks[2].y = blocks[0].y;
-    blocks[3].x = blocks[0].x + Block.SIZE;
-    blocks[3].y = blocks[0].y + Block.SIZE;
+    for (int i = 0; i < blocks.length; i++) {
+      blocks[i].setBlockX(x + rotationOffsets[1][i * 2] * Block.SIZE);
+      blocks[i].setBlockY(y + rotationOffsets[1][i * 2 + 1] * Block.SIZE);
+    }
   }
 
 
-  /**
-   *   1
-   *   0 2
-   *     3
-   */
   @Override
-  Tetromino rotatePosition1() {
-    blocks[1].x = blocks[0].x;
-    blocks[1].y = blocks[0].y - Block.SIZE;
-    blocks[2].x = blocks[0].x - Block.SIZE;
-    blocks[2].y = blocks[0].y;
-    blocks[3].x = blocks[0].x - Block.SIZE;
-    blocks[3].y = blocks[0].y + Block.SIZE;
+  Tetromino rotateToPosition(int number) {
+    for (int i = 0; i < blocks.length; i++) {
+      blocks[i].setBlockX(blocks[0].getBlockX() + rotationOffsets[number][i * 2] * Block.SIZE);
+      blocks[i].setBlockY(blocks[0].getBlockY() + rotationOffsets[number][i * 2 + 1] * Block.SIZE);
+    }
 
+    direction++;
     return this;
-  }
-
-
-  /**
-   *     0 1
-   *   3 2
-   */
-  @Override
-  Tetromino rotatePosition2() {
-    blocks[1].x = blocks[0].x + Block.SIZE;
-    blocks[1].y = blocks[0].y;
-    blocks[2].x = blocks[0].x;
-    blocks[2].y = blocks[0].y + Block.SIZE;
-    blocks[3].x = blocks[0].x - Block.SIZE;
-    blocks[3].y = blocks[0].y + Block.SIZE;
-
-    return this;
-  }
-
-
-  /**
-   *   3
-   *   2 0
-   *     1
-   */
-  @Override
-  Tetromino rotatePosition3() {
-    return rotatePosition1();
-  }
-
-
-  /**
-   *     2 3
-   *   1 0
-   */
-  @Override
-  Tetromino rotatePosition4() {
-    return rotatePosition2();
   }
 }

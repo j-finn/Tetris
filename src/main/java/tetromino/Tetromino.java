@@ -61,73 +61,49 @@ public abstract class Tetromino implements Cloneable {
 
 
     public Tetromino rotatePosition() {
-        switch (direction) {
-            case 1:
-                direction = (direction % 4) + 1;
-                return rotatePosition2();
-            case 2:
-                direction = (direction % 4) + 1;
-                return rotatePosition3();
-            case 3:
-                direction = (direction % 4) + 1;
-                return rotatePosition4();
-            case 4:
-                direction = (direction % 4) + 1;
-                return rotatePosition1();
-            default:
-                throw new IllegalStateException("Rotated position was out of bounds, should be" +
-                  "in either 1, 2, 3 or 4, but was: " + direction);
-        }
+        direction = (direction % 4);
+        return rotateToPosition(direction);
     }
 
 
-    abstract Tetromino rotatePosition1();
-
-
-    abstract Tetromino rotatePosition2();
-
-
-    abstract Tetromino rotatePosition3();
-
-
-    abstract Tetromino rotatePosition4();
+    abstract Tetromino rotateToPosition(int number);
 
 
     public Tetromino moveRight() {
-        blocks[0].setX(blocks[0].getBlockX() + Block.SIZE);
-        blocks[1].setX(blocks[1].getBlockX() + Block.SIZE);
-        blocks[2].setX(blocks[2].getBlockX() + Block.SIZE);
-        blocks[3].setX(blocks[3].getBlockX() + Block.SIZE);
+        blocks[0].setBlockX(blocks[0].getBlockX() + Block.SIZE);
+        blocks[1].setBlockX(blocks[1].getBlockX() + Block.SIZE);
+        blocks[2].setBlockX(blocks[2].getBlockX() + Block.SIZE);
+        blocks[3].setBlockX(blocks[3].getBlockX() + Block.SIZE);
 
         return this;
     }
 
 
     public Tetromino moveLeft() {
-        blocks[0].setX(blocks[0].getBlockX() - Block.SIZE);
-        blocks[1].setX(blocks[1].getBlockX() - Block.SIZE);
-        blocks[2].setX(blocks[2].getBlockX() - Block.SIZE);
-        blocks[3].setX(blocks[3].getBlockX() - Block.SIZE);
+        blocks[0].setBlockX(blocks[0].getBlockX() - Block.SIZE);
+        blocks[1].setBlockX(blocks[1].getBlockX() - Block.SIZE);
+        blocks[2].setBlockX(blocks[2].getBlockX() - Block.SIZE);
+        blocks[3].setBlockX(blocks[3].getBlockX() - Block.SIZE);
 
         return this;
     }
 
 
     public Tetromino moveDown() {
-        blocks[0].setY(blocks[0].getBlockY() + Block.SIZE);
-        blocks[1].setY(blocks[1].getBlockY() + Block.SIZE);
-        blocks[2].setY(blocks[2].getBlockY() + Block.SIZE);
-        blocks[3].setY(blocks[3].getBlockY() + Block.SIZE);
+        blocks[0].setBlockY(blocks[0].getBlockY() + Block.SIZE);
+        blocks[1].setBlockY(blocks[1].getBlockY() + Block.SIZE);
+        blocks[2].setBlockY(blocks[2].getBlockY() + Block.SIZE);
+        blocks[3].setBlockY(blocks[3].getBlockY() + Block.SIZE);
 
         return this;
     }
 
 
     public Tetromino moveUp() {
-        blocks[0].setY(blocks[0].getBlockY() - Block.SIZE);
-        blocks[1].setY(blocks[1].getBlockY() - Block.SIZE);
-        blocks[2].setY(blocks[2].getBlockY() - Block.SIZE);
-        blocks[3].setY(blocks[3].getBlockY() - Block.SIZE);
+        blocks[0].setBlockY(blocks[0].getBlockY() - Block.SIZE);
+        blocks[1].setBlockY(blocks[1].getBlockY() - Block.SIZE);
+        blocks[2].setBlockY(blocks[2].getBlockY() - Block.SIZE);
+        blocks[3].setBlockY(blocks[3].getBlockY() - Block.SIZE);
 
         return this;
     }

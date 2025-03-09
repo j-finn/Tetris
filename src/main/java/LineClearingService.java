@@ -73,7 +73,7 @@ public class LineClearingService {
 
     for (Block staticBlock: staticBlocks) {
       if (staticBlock.getBlockY() < rowYThatWasDeleted) {
-        staticBlock.setY(staticBlock.getBlockY() + SIZE);
+        staticBlock.setBlockY(staticBlock.getBlockY() + SIZE);
       }
     }
   }
