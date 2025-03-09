@@ -55,101 +55,126 @@ public class GameModel {
     this.deactivateCounter = 0;
   }
 
+
   public ArrayList<Block> getStaticBlocks() {
     return staticBlocks;
   }
+
 
   public int getMinoStartX() {
     return MINO_START_X;
   }
 
+
   public int getMinoStartY() {
     return MINO_START_Y;
   }
+
 
   public int getNextMinoStartX() {
     return NEXT_MINO_START_X;
   }
 
+
   public int getNextMinoStartY() {
     return NEXT_MINO_START_Y;
   }
+
 
   public void setCurrentMino(Tetromino currentMino) {
     this.currentMino = currentMino;
   }
 
+
   public Tetromino getCurrentMino() {
     return currentMino;
   }
+
 
   public Tetromino getNextMino() {
     return nextMino;
   }
 
+
   public void setNextMino(Tetromino nextMino) {
     this.nextMino = nextMino;
   }
+
 
   public int getBottomBoundary() {
     return BOTTOM_BOUNDARY;
   }
 
+
   public int getRightBoundary() {
     return RIGHT_BOUNDARY;
   }
+
 
   public int getLeftBoundary() {
     return LEFT_BOUNDARY;
   }
 
+
   public int getTopBoundary() {
     return TOP_BOUNDARY;
   }
+
 
   public boolean isGamePaused() {
     return gamePaused;
   }
 
+
   public void togglePause() {
     this.gamePaused = !this.gamePaused;
   }
+
 
   public boolean isGameOver() {
     return gameOver;
   }
 
+
   public void setGameOver(boolean gameOver) {
     this.gameOver = gameOver;
   }
+
 
   public int getDeactivateCounter() {
     return deactivateCounter;
   }
 
+
   public void setDeactivateCounter(int deactivateCounter) {
     this.deactivateCounter = deactivateCounter;
   }
+
 
   public int getLevel() {
     return level;
   }
 
+
   public int getScore() {
     return score;
   }
+
 
   public void setLevel(int level) {
     this.level = level;
   }
 
+
   public void setScore(int score) {
     this.score = score;
   }
 
+
   public void setLines(int lines) {
     this.lines = lines;
   }
+
 
   public int getLines() {
     return lines;

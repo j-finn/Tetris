@@ -16,10 +16,10 @@ public abstract class Tetromino implements Cloneable {
     }
 
 
-    // TODO: Colour to live on the mino? or the block?
     public Color getMinoColor() {
         return blocks[0].getColour();
     }
+
 
     public void create(Color c) {
         blocks[0] = new Block(c);
@@ -54,9 +54,11 @@ public abstract class Tetromino implements Cloneable {
         return isMinoActive;
     }
 
+
     public void setMinoActive(boolean minoActive) {
         isMinoActive = minoActive;
     }
+
 
     public Tetromino rotatePosition() {
         switch (direction) {
@@ -134,6 +136,7 @@ public abstract class Tetromino implements Cloneable {
     public boolean isBlockDeactivating() {
         return isBlockDeactivating;
     }
+
 
     public void setBlockDeactivating(boolean blockDeactivating) {
         isBlockDeactivating = blockDeactivating;
