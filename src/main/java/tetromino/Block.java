@@ -24,29 +24,6 @@ public class Block extends Rectangle implements Cloneable {
     }
 
 
-    public void draw(Graphics2D graphics2D) {
-        int margin = 2;
-        graphics2D.setColor(colour);
-        graphics2D.fillRect(x + margin , y + margin, SIZE - (margin * 2), SIZE - (margin * 2));
-    }
-
-
-    public void drawOutline(Graphics2D graphics2D) {
-        graphics2D.setColor(colour);
-        graphics2D.fillRect(x, y, Block.SIZE, Block.SIZE);
-        graphics2D.fillRect(x, y, Block.SIZE, Block.SIZE);
-        graphics2D.fillRect(x, y, Block.SIZE, Block.SIZE);
-        graphics2D.fillRect(x, y, Block.SIZE, Block.SIZE);
-
-        int margin = 2;
-        graphics2D.setColor(Color.BLACK);
-        graphics2D.fillRect(x + margin, y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-        graphics2D.fillRect(x + margin, y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-        graphics2D.fillRect(x + margin, y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-        graphics2D.fillRect(x + margin, y + margin, Block.SIZE - (margin * 2), Block.SIZE  - (margin * 2));
-    }
-
-
     public Color getColour() {
         return colour;
     }

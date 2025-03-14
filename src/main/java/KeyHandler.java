@@ -3,6 +3,10 @@ package main.java;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Responsible for converting each {@link KeyEvent} into a {@link GameAction} which
+ * gets passed to the {@link GameActionListener}.
+ */
 public class KeyHandler implements KeyListener {
 
   GameActionListener gameActionListener;

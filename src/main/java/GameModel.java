@@ -29,6 +29,7 @@ public class GameModel {
   public static int BOTTOM_BOUNDARY = TOP_BOUNDARY + PLAY_AREA_HEIGHT;
 
   private Tetromino currentMino;
+  private Tetromino projectedMino;
   private int deactivateCounter;
   private Tetromino nextMino;
 
@@ -88,6 +89,16 @@ public class GameModel {
 
   public Tetromino getCurrentMino() {
     return currentMino;
+  }
+
+
+  public Tetromino getProjectedMino() {
+    return projectedMino;
+  }
+
+
+  public void setProjectedMino(Tetromino projectedMino) {
+    this.projectedMino = projectedMino;
   }
 
 

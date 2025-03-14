@@ -27,6 +27,7 @@ public class GameController implements Runnable, GameActionListener {
   RenderService renderService;
   CollisionService collisionService;
   LineClearingService lineClearingService;
+  MinoProjectionService minoProjectionService;
 
   //-------------
   // SOUND
@@ -40,12 +41,14 @@ public class GameController implements Runnable, GameActionListener {
                         GameModel gameModel,
                         TetrominoGeneratorService tetrominoGeneratorService,
                         CollisionService collisionService,
-                        LineClearingService lineClearingService) {
+                        LineClearingService lineClearingService,
+                        MinoProjectionService minoProjectionService) {
     this.renderService = renderService;
     this.tetrominoGeneratorService = tetrominoGeneratorService;
     this.gameModel = gameModel;
     this.collisionService = collisionService;
     this.lineClearingService = lineClearingService;
+    this.minoProjectionService = minoProjectionService;
 
     // initialise mino
     gameModel.setCurrentMino(tetrominoGeneratorService.pickRandomTetromino());
@@ -67,7 +70,8 @@ public class GameController implements Runnable, GameActionListener {
     RenderService renderService = new RenderService(gameModel);
     CollisionService collisionService = new CollisionService(gameModel);
     LineClearingService lineClearingService = new LineClearingService();
-    GameController gameController = new GameController(renderService, gameModel, tetrominoGeneratorService, collisionService, lineClearingService);
+    MinoProjectionService minoProjectionService = new MinoProjectionService(collisionService);
+    GameController gameController = new GameController(renderService, gameModel, tetrominoGeneratorService, collisionService, lineClearingService, minoProjectionService);
 
     KeyHandler keyHandler = new KeyHandler(gameController);
 
@@ -253,6 +257,9 @@ public class GameController implements Runnable, GameActionListener {
 
     if (gameModel.getCurrentMino().isActive()) {
 
+      // Project current mino
+      gameModel.setProjectedMino(minoProjectionService.project(gameModel.getCurrentMino()));
+
       if (hasHitBottom()) {
         gameModel.getCurrentMino().setBlockDeactivating(true);
       } else {
@@ -273,6 +280,7 @@ public class GameController implements Runnable, GameActionListener {
       // Replace current mino with next mino
       gameModel.setCurrentMino(gameModel.getNextMino());
       gameModel.getCurrentMino().setXY(gameModel.getMinoStartX(), gameModel.getMinoStartY());
+      // Set next mino
       gameModel.setNextMino(tetrominoGeneratorService.pickRandomTetromino());
       gameModel.getNextMino().setXY(gameModel.getNextMinoStartX(), gameModel.getNextMinoStartY());
 

@@ -5,9 +5,12 @@ import main.java.tetromino.Tetromino;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static main.java.GameConfiguration.PLAY_AREA_HEIGHT;
 import static main.java.GameConfiguration.PLAY_AREA_WIDTH;
+import static main.java.tetromino.Block.SIZE;
 
 /**
  * Responsible for drawing.
@@ -40,22 +43,10 @@ public class RenderService extends JPanel {
 
     drawScoreboard(graphics2D);
 
-//    List<Block> blockOutlinesToDelete = new ArrayList<>();
-//
-//    for (int j = 0; j < gameModel.getCurrentMino().getB().length; j++) {
-//      for (int i = 0; i < droppedBlockOutlines.size(); i++) {
-//        if (droppedBlockOutlines.get(i).x == gameModel.getCurrentMino().getB()[j].x &&
-//          droppedBlockOutlines.get(i).y == gameModel.getCurrentMino().getB()[j].y) {
-//          blockOutlinesToDelete.add(droppedBlockOutlines.get(i));
-//        }
-//      }
-//    }
-//
-//    droppedBlockOutlines.removeAll(blockOutlinesToDelete);
-//
-//    for (int i = 0; i < droppedBlockOutlines.size(); i++) {
-//      droppedBlockOutlines.get(i).drawOutline(graphics2D);
-//    }
+    // Draw the projection of current mino
+    if (gameModel.getProjectedMino() != null) {
+      drawOutline(graphics2D, gameModel.getProjectedMino());
+    }
 
     // Draw the current mino
     if (gameModel.getCurrentMino() != null) {
@@ -68,7 +59,7 @@ public class RenderService extends JPanel {
     }
 
     for (int i = 0; i < gameModel.getStaticBlocks().size(); i++) {
-      gameModel.getStaticBlocks().get(i).draw(graphics2D);
+      draw(graphics2D, gameModel.getStaticBlocks().get(i));
     }
 
     if (gameModel.isGameOver()) {
@@ -86,7 +77,36 @@ public class RenderService extends JPanel {
     graphics2D.setColor(tetromino.getMinoColor());
 
     for (Block block : tetromino.getBlocks()) {
-      graphics2D.fillRect(block.getBlockX() + margin, block.getBlockY() + margin, Block.SIZE - (margin * 2), Block.SIZE - (margin * 2));
+      graphics2D.fillRect(block.getBlockX() + margin, block.getBlockY() + margin, SIZE - (margin * 2), SIZE - (margin * 2));
+    }
+  }
+
+
+  public void draw(Graphics2D graphics2D, Block block) {
+    int margin = 2;
+    graphics2D.setColor(block.getColour());
+    graphics2D.fillRect(block.getBlockX() + margin , block.getBlockY() + margin, SIZE - (margin * 2), SIZE - (margin * 2));
+  }
+
+
+  public void drawOutline(Graphics2D graphics2D, Tetromino tetromino) {
+    int margin = 2;
+
+    ArrayList<Block> blockOutlinesToDraw = new ArrayList<>(Arrays.asList(tetromino.getBlocks()));
+
+    for (Block projectedBlock : tetromino.getBlocks()) {
+      for (Block currentBlock : gameModel.getCurrentMino().getBlocks()) {
+        if (projectedBlock.equals(currentBlock)) {
+          blockOutlinesToDraw.remove(projectedBlock);
+        }
+      }
+    }
+
+    for (Block block : blockOutlinesToDraw) {
+      graphics2D.setColor(tetromino.getMinoColor());
+      graphics2D.fillRect(block.getBlockX(), block.getBlockY(), SIZE, SIZE);
+      graphics2D.setColor(Color.BLACK);
+      graphics2D.fillRect(block.getBlockX() + margin, block.getBlockY() + margin, SIZE - (margin * 2), SIZE - (margin * 2));
     }
   }
 
