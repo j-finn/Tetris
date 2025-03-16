@@ -14,8 +14,6 @@ import static main.java.SoundService.Sound.*;
  */
 public class GameController implements Runnable, GameActionListener {
 
-  public static ArrayList<Block> droppedBlockOutlines = new ArrayList<>();
-
   GameModel gameModel;
   Thread gameThread;
 
