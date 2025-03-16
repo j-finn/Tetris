@@ -4,6 +4,8 @@ import main.java.tetromino.Block;
 import main.java.tetromino.Tetromino;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import static main.java.GameConfiguration.*;
 
@@ -21,6 +23,8 @@ import static main.java.GameConfiguration.*;
 public class GameModel {
 
   private ArrayList<Block> staticBlocks;
+
+  private HashMap<TetrominoType, Integer> minoCount = new HashMap<>();
 
   //Main play area frame
   public static int LEFT_BOUNDARY = ((WINDOW_WIDTH - PLAY_AREA_WIDTH) / 2); // (1280 - 360)/2 = 460 (i.e. divide the extra space evenly
@@ -54,6 +58,10 @@ public class GameModel {
     this.staticBlocks = new ArrayList<>();
     this.gamePaused = false;
     this.deactivateCounter = 0;
+
+    // Initialise the
+    Arrays.stream(TetrominoType.values())
+      .forEach(type -> minoCount.put(type, 0));
   }
 
 
@@ -189,5 +197,9 @@ public class GameModel {
 
   public int getLines() {
     return lines;
+  }
+
+  public HashMap<TetrominoType, Integer> getMinoCount() {
+    return minoCount;
   }
 }

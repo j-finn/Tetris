@@ -6,6 +6,9 @@ import main.java.tetromino.Tetromino;
 import javax.swing.*;
 import java.util.ArrayList;
 
+import static main.java.GameAction.PAUSE;
+import static main.java.SoundService.Sound.*;
+
 /**
  * Responsible for orchestrating all game services.
  */
@@ -32,9 +35,8 @@ public class GameController implements Runnable, GameActionListener {
   //-------------
   // SOUND
   //-------------
-  public static SoundService music = new SoundService();
-  //    public static main.java.Sound soundEffect = new main.java.Sound(); // TODO Re-implement
-  public static boolean musicMuted = false;
+  public static SoundService soundService = new SoundService();
+
 
 
   public GameController(RenderService renderService,
@@ -50,8 +52,10 @@ public class GameController implements Runnable, GameActionListener {
     this.lineClearingService = lineClearingService;
     this.minoProjectionService = minoProjectionService;
 
-    // initialise mino
-    gameModel.setCurrentMino(tetrominoGeneratorService.pickRandomTetromino());
+    // initialise first mino and handle the count
+    Tetromino firstMino = tetrominoGeneratorService.pickRandomTetromino();
+    tetrominoGeneratorService.incrementMinoCount(firstMino);
+    gameModel.setCurrentMino(firstMino);
     gameModel.getCurrentMino().setXY(gameModel.getMinoStartX(), gameModel.getMinoStartY());
 
     // initialise next mino
@@ -66,7 +70,7 @@ public class GameController implements Runnable, GameActionListener {
     window.setResizable(false);
 
     GameModel gameModel = new GameModel();
-    TetrominoGeneratorService tetrominoGeneratorService = new TetrominoGeneratorService();
+    TetrominoGeneratorService tetrominoGeneratorService = new TetrominoGeneratorService(gameModel);
     RenderService renderService = new RenderService(gameModel);
     CollisionService collisionService = new CollisionService(gameModel);
     LineClearingService lineClearingService = new LineClearingService();
@@ -94,6 +98,18 @@ public class GameController implements Runnable, GameActionListener {
    */
   @Override
   public void handleGameAction(GameAction gameAction) {
+
+    if (gameModel.isGamePaused() && !gameAction.equals(PAUSE)) {
+      // If paused, Mino should not be moveable but it must be possible to unpause
+      return;
+    }
+
+    if (gameModel.isGameOver()) {
+      // TODO: If implementing restart, will need to permit the key press
+      //  that restarts the game here.
+      return;
+    }
+
     switch (gameAction) {
       case MOVE_RIGHT:
         moveRight();
@@ -116,7 +132,7 @@ public class GameController implements Runnable, GameActionListener {
         drop();
         break;
       case MUTE:
-        toggleMusic();
+        soundService.toggleMusic(TETRIS_THEME);
         break;
       case RESTART:
         // TODO
@@ -175,6 +191,7 @@ public class GameController implements Runnable, GameActionListener {
     }
 
     // cloned mino has collided, shift back up to valid position and set as our current mino
+    copyMino.setMinoActive(false);
     gameModel.setCurrentMino(copyMino.moveUp());
   }
 
@@ -182,8 +199,8 @@ public class GameController implements Runnable, GameActionListener {
   public void launchGame() {
     startThreads();
 
-    music.play(2, true);
-    music.loop();
+    soundService.toggleMusic(TETRIS_THEME);
+    soundService.loop();
   }
 
 
@@ -219,17 +236,6 @@ public class GameController implements Runnable, GameActionListener {
   }
 
 
-  public void toggleMusic() {
-    if (musicMuted) {
-      music.play(2, true);
-      music.loop();
-    } else {
-      music.stop();
-    }
-    musicMuted = !musicMuted;
-  }
-
-
   public void deactivating() {
     gameModel.setDeactivateCounter(gameModel.getDeactivateCounter() + 1);
 
@@ -243,6 +249,21 @@ public class GameController implements Runnable, GameActionListener {
         gameModel.setDeactivateCounter(0);
       }
     }
+  }
+
+
+  /**
+   * Spawns the next Mino and increments the count of generated Minos.
+   */
+  private void nextMinoSpawn() {
+    // Promote the next Mino
+    gameModel.setCurrentMino(gameModel.getNextMino());
+
+    // Update its coordinates to the active mino start position
+    gameModel.getCurrentMino().setXY(gameModel.getMinoStartX(), gameModel.getMinoStartY());
+
+    // Increment the count of spawned Minos
+    tetrominoGeneratorService.incrementMinoCount(gameModel.getCurrentMino());
   }
 
 
@@ -278,23 +299,25 @@ public class GameController implements Runnable, GameActionListener {
       gameModel.getCurrentMino().setBlockDeactivating(false);
 
       // Replace current mino with next mino
-      gameModel.setCurrentMino(gameModel.getNextMino());
-      gameModel.getCurrentMino().setXY(gameModel.getMinoStartX(), gameModel.getMinoStartY());
+      nextMinoSpawn();
+
       // Set next mino
       gameModel.setNextMino(tetrominoGeneratorService.pickRandomTetromino());
       gameModel.getNextMino().setXY(gameModel.getNextMinoStartX(), gameModel.getNextMinoStartY());
 
       // instant collision on spawn -> game over
-      if (hasHitBottom()) {
+      if (collisionService.checkMovementCollision(gameModel.getCurrentMino())) {
         gameModel.setGameOver(true);
-        music.stop();
-        //                soundEffect.play(1, true);
+        soundService.stop();
+        soundService.toggleMusic(GAME_OVER);
       }
 
       int numberOfDeletedLines = lineClearingService.checkDelete(gameModel.getStaticBlocks());
 
       // Add score
       if (numberOfDeletedLines > 0) {
+        soundService.playSoundEffect(DELETE_LINE);
+
         int singleLineScore = 10 * gameModel.getLevel();
         gameModel.setScore(gameModel.getScore() + singleLineScore * numberOfDeletedLines);
 
@@ -310,10 +333,6 @@ public class GameController implements Runnable, GameActionListener {
             dropInterval -= 1;
           }
         }
-
-//            droppedBlockOutlines.clear();
-//            droppedBlockOutlines.addAll(Arrays.asList(currentMino.dropBlockForDrawing()));
-//            update();
       }
     }
   }

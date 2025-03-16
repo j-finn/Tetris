@@ -1,5 +1,7 @@
 package main.java.tetromino;
 
+import main.java.TetrominoType;
+
 import java.awt.*;
 
 public abstract class Tetromino implements Cloneable {
@@ -117,4 +119,7 @@ public abstract class Tetromino implements Cloneable {
     public void setBlockDeactivating(boolean blockDeactivating) {
         isBlockDeactivating = blockDeactivating;
     }
+
+
+    public abstract TetrominoType getType();
 }

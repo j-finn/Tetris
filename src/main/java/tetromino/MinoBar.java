@@ -1,5 +1,7 @@
 package main.java.tetromino;
 
+import main.java.TetrominoType;
+
 import java.awt.*;
 
 /**
@@ -24,6 +26,12 @@ public class MinoBar extends Tetromino {
 
   public MinoBar() {
     create(Color.CYAN);
+  }
+
+
+  @Override
+  public TetrominoType getType() {
+    return TetrominoType.MINO_BAR;
   }
 
 

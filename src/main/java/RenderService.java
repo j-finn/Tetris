@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static main.java.GameConfiguration.PLAY_AREA_HEIGHT;
 import static main.java.GameConfiguration.PLAY_AREA_WIDTH;
@@ -42,6 +44,8 @@ public class RenderService extends JPanel {
     drawWaitingRoomForNextTetromino(graphics2D);
 
     drawScoreboard(graphics2D);
+
+    drawMinoCount(graphics2D);
 
     // Draw the projection of current mino
     if (gameModel.getProjectedMino() != null) {
@@ -163,5 +167,26 @@ public class RenderService extends JPanel {
     graphics2D.drawString("LEVEL: " + gameModel.getLevel(), x, gameModel.getTopBoundary() + 90);
     graphics2D.drawString("LINES: " + gameModel.getLines(), x, gameModel.getTopBoundary() + 160);
     graphics2D.drawString("SCORE: " + gameModel.getScore(), x, gameModel.getTopBoundary() + 230);
+  }
+
+
+  /**
+   * Draw the count of all of the Mino's that have been generated.
+   */
+  private void drawMinoCount(Graphics2D graphics2D) {
+
+    int x = gameModel.getLeftBoundary() - 350;
+    graphics2D.setFont(new Font("Arial", Font.PLAIN, 30));
+
+//    graphics2D.drawRect(x, gameModel.getTopBoundary(), 250, 300);
+//    x += 40;
+    int initialYOffset = 120;
+
+    for (Map.Entry<TetrominoType, Integer> mino: gameModel.getMinoCount().entrySet()) {
+      graphics2D.drawString(mino.getKey().name() + " : " + mino.getValue(), x, gameModel.getTopBoundary() + initialYOffset);
+
+      // Offset for drawing the next Mino count
+      initialYOffset += 50;
+    }
   }
 }

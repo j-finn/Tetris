@@ -1,5 +1,7 @@
 package main.java.tetromino;
 
+import main.java.TetrominoType;
+
 import java.awt.*;
 
 /**
@@ -23,6 +25,12 @@ public class MinoSquare extends Tetromino {
 
   public MinoSquare() {
     create(Color.YELLOW);
+  }
+
+
+  @Override
+  public TetrominoType getType() {
+    return TetrominoType.MINO_SQUARE;
   }
 
 

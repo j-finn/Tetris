@@ -8,6 +8,13 @@ public class TetrominoGeneratorService {
 
   private static final Random RANDOM = new Random();
 
+  private GameModel gameModel;
+
+  public TetrominoGeneratorService(GameModel gameModel) {
+    this.gameModel = gameModel;
+  }
+
+
   public Tetromino pickRandomTetromino() {
     TetrominoType[] values = TetrominoType.values();
     TetrominoType randomType = values[RANDOM.nextInt(values.length)];
@@ -25,13 +32,12 @@ public class TetrominoGeneratorService {
   }
 
 
-  private enum TetrominoType {
-    MINO_Z1,
-    MINO_Z2,
-    MINO_T,
-    MINO_BAR,
-    MINO_SQUARE,
-    MINO_L1,
-    MINO_L2
+  /**
+   * Used to count the number of each type of Mino that has been generated.
+   *
+   * @param tetromino whose type we need to increment.
+   */
+  public void incrementMinoCount(Tetromino tetromino) {
+    gameModel.getMinoCount().compute(tetromino.getType(), (k,v) -> v == null ? 1 : v + 1);
   }
 }
