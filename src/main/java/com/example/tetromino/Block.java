@@ -1,11 +1,11 @@
-package main.java.tetromino;
+package com.example.tetromino;
 
 import java.awt.*;
 import java.util.Objects;
 
 public class Block extends Rectangle implements Cloneable {
 
-    public int x, y;
+    private int x, y;
     public static final int SIZE = 30; // 30x30 block
     private Color colour;
 

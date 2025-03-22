@@ -1,6 +1,6 @@
-package main.java;
+package com.example;
 
-import main.java.tetromino.Tetromino;
+import com.example.tetromino.Tetromino;
 
 /**
  * Responsible for projecting where a {@link Tetromino} would

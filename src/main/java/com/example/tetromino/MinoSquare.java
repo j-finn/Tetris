@@ -1,6 +1,6 @@
-package main.java.tetromino;
+package com.example.tetromino;
 
-import main.java.TetrominoType;
+import com.example.TetrominoType;
 
 import java.awt.*;
 

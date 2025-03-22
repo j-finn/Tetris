@@ -1,13 +1,11 @@
-package main.java;
+package com.example;
 
-import main.java.tetromino.Block;
-import main.java.tetromino.Tetromino;
+import com.example.tetromino.Tetromino;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
-import static main.java.GameAction.PAUSE;
-import static main.java.SoundService.Sound.*;
+import static com.example.GameAction.PAUSE;
+import static com.example.SoundService.Sound.*;
 
 /**
  * Responsible for orchestrating all game services.

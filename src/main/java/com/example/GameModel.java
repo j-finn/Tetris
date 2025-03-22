@@ -1,13 +1,13 @@
-package main.java;
+package com.example;
 
-import main.java.tetromino.Block;
-import main.java.tetromino.Tetromino;
+import com.example.tetromino.Block;
+import com.example.tetromino.Tetromino;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static main.java.GameConfiguration.*;
+import static com.example.GameConfiguration.*;
 
 /**
  * Stores data about the game:

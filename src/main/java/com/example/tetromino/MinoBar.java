@@ -1,17 +1,14 @@
-package main.java.tetromino;
+package com.example.tetromino;
 
-import main.java.TetrominoType;
+import com.example.TetrominoType;
 
 import java.awt.*;
 
 /**
  * Shape:
- * 1
- * 0 2
- * 3
+ * 1 0 2 3
  */
-public class MinoZ2 extends Tetromino {
-
+public class MinoBar extends Tetromino {
 
   /**
    * Each row in the array is a different one of the 4 possible rotations.
@@ -20,21 +17,21 @@ public class MinoZ2 extends Tetromino {
    * and down in the y direction.
    */
   static int[][] rotationOffsets = {
-    {0, 0, 0, -1, 1, 0, 1, 1}, // Rotation state 1
-    {0, 0, 1, 0, 0, 1, -1, 1}, // Rotation state 2
-    {0, 0, 0, 1, -1, 0, -1, -1}, // Rotation state 3
-    {0, 0, -1, 0, 0, -1, 1, -1}  // Rotation state 4
+    {0, 0, 0, 1, 0, -1, 0, -2}, // Rotation state 1
+    {0, 0, -1, 0, 1, 0, 2, 0}, // Rotation state 2
+    {0, 0, 0, -1, 0, 1, 0, 2}, // Rotation state 3
+    {0, 0, 1, 0, -1, 0, -2, 0}  // Rotation state 4
   };
 
 
-  public MinoZ2() {
-    create(Color.GREEN);
+  public MinoBar() {
+    create(Color.CYAN);
   }
 
 
   @Override
   public TetrominoType getType() {
-    return TetrominoType.MINO_Z2;
+    return TetrominoType.MINO_BAR;
   }
 
 
@@ -47,7 +44,6 @@ public class MinoZ2 extends Tetromino {
   }
 
 
-  @Override
   Tetromino rotateToPosition(int number) {
     for (int i = 0; i < blocks.length; i++) {
       blocks[i].setBlockX(blocks[0].getBlockX() + rotationOffsets[number][i * 2] * Block.SIZE);

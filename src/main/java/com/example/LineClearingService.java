@@ -1,13 +1,13 @@
-package main.java;
+package com.example;
 
-import main.java.tetromino.Block;
+import com.example.tetromino.Block;
 
 import java.util.ArrayList;
 
-import static main.java.GameConfiguration.*;
-import static main.java.GameModel.LEFT_BOUNDARY;
-import static main.java.GameModel.TOP_BOUNDARY;
-import static main.java.tetromino.Block.SIZE;
+import static com.example.GameConfiguration.*;
+import static com.example.GameModel.LEFT_BOUNDARY;
+import static com.example.GameModel.TOP_BOUNDARY;
+import static com.example.tetromino.Block.SIZE;
 
 /**
  * Responsible for checking complete lines and adjusting static blocks as required.
@@ -90,7 +90,7 @@ public class LineClearingService {
     ArrayList<Block> blocksToDelete = new ArrayList<>();
 
     for (Block staticBlock: staticBlocks) {
-      if (staticBlock.y == rowToDelete) {
+      if (staticBlock.getBlockY() == rowToDelete) {
         blocksToDelete.add(staticBlock);
       }
     }

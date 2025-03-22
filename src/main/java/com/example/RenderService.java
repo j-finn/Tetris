@@ -1,18 +1,17 @@
-package main.java;
+package com.example;
 
-import main.java.tetromino.Block;
-import main.java.tetromino.Tetromino;
+import com.example.tetromino.Block;
+import com.example.tetromino.Tetromino;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
-import static main.java.GameConfiguration.PLAY_AREA_HEIGHT;
-import static main.java.GameConfiguration.PLAY_AREA_WIDTH;
-import static main.java.tetromino.Block.SIZE;
+import static com.example.GameConfiguration.PLAY_AREA_HEIGHT;
+import static com.example.GameConfiguration.PLAY_AREA_WIDTH;
+import static com.example.tetromino.Block.SIZE;
 
 /**
  * Responsible for drawing.

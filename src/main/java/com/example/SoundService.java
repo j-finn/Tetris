@@ -1,4 +1,4 @@
-package main.java;
+package com.example;
 
 import javax.sound.sampled.*;
 import java.net.URL;

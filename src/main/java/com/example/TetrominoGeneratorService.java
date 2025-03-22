@@ -1,6 +1,6 @@
-package main.java;
+package com.example;
 
-import main.java.tetromino.*;
+import com.example.tetromino.*;
 
 import java.util.Random;
 

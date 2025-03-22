@@ -1,7 +1,6 @@
-package main.java;
+package com.example;
 
-import main.java.tetromino.Block;
-import main.java.tetromino.Tetromino;
+import com.example.tetromino.Block;
 
 /**
  * Configuration that is required globally.
