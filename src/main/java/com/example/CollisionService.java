@@ -57,21 +57,20 @@ public class CollisionService {
   private boolean checkBoundaryCollision(Tetromino currentTetromino) {
 
     for (Block block: currentTetromino.getBlocks()) {
-      if (block.getBlockX() == gameModel.getLeftBoundary() - Block.SIZE) {
-      // The x coordinate of the block is the left hand edge. We subtract the block size from the boundary as
-      // we only care if a left move would move us further than boundary x == block x.
+      if (block.getBlockX() < gameModel.getLeftBoundary()) {
+        // The x coordinate of the block is the left hand edge. If x coordinate equals left boundary
+        // the block is just moving down the left hand boundary which is okay.
         return true;
       }
 
-      if (block.getBlockX() == gameModel.getRightBoundary()) {
-        // Note we do not need to adjust this boundary since x coordinate of block is the left edge
-        // so if block.x == right boundary x, the block has gone too far.
+      if (block.getBlockX() >= gameModel.getRightBoundary()) {
+        // x coordinate is left hand edge, so it's only in bounds if the x coordinate is less than the boundary x.
         return true;
       }
 
-      if (block.getBlockY() == gameModel.getBottomBoundary()) {
-        // Likewise, y coordinate of block is the top. We shift the boundary up and check for equality.
-        // If we get a match, then we know the bottom of the block is touching the boundary.
+      if (block.getBlockY() >= gameModel.getBottomBoundary()) {
+        // The y coordinate of block is the top edge and y increases further down the screen.
+        // Only in bounds if the y coordinate is less than the bottom boundary.
         return true;
       }
     }
