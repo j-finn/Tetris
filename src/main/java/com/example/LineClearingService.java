@@ -22,7 +22,7 @@ public class LineClearingService {
    * @param staticBlocks array list
    * @return a 2d boolean of dimensions x = number of blocks wide and y = number of blocks high
    */
-  public boolean[][] convertBlocksTo2dBooleanArray(ArrayList<Block> staticBlocks) {
+  private boolean[][] convertBlocksTo2dBooleanArray(ArrayList<Block> staticBlocks) {
     boolean[][] board = new boolean[BLOCKS_PER_ROW][BLOCKS_PER_COLUMN];
 
     for (Block staticBlock : staticBlocks) {
