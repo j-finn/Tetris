@@ -6,7 +6,7 @@ import java.awt.*;
 
 /**
  * Shape:
- * 1
+ *   1
  * 2 0
  * 3
  */
