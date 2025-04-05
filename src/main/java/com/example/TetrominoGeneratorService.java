@@ -4,6 +4,10 @@ import com.example.tetromino.*;
 
 import java.util.Random;
 
+/**
+ * Service responsible for randomly generating tetrominos and tracking a count
+ * of which pieces were generated.
+ */
 public class TetrominoGeneratorService {
 
   private static final Random RANDOM = new Random();
