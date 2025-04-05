@@ -36,7 +36,6 @@ public class SoundService {
 
 
   private void play(Sound sound, boolean isMusic) {
-
     try {
       AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url[sound.getSongNumber()]);
       Clip clip = AudioSystem.getClip();
@@ -56,7 +55,7 @@ public class SoundService {
       clip.start();
 
     } catch (Exception e) {
-
+      e.printStackTrace();
     }
   }
 
