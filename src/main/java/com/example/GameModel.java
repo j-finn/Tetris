@@ -42,7 +42,7 @@ public class GameModel {
   private static final int MINO_START_Y = TOP_BOUNDARY + Block.SIZE;
 
   // Initialise next mino start position
-  private static final int NEXT_MINO_START_X = RIGHT_BOUNDARY + 175;
+  private static final int NEXT_MINO_START_X = RIGHT_BOUNDARY + 180;
   private static final int NEXT_MINO_START_Y = TOP_BOUNDARY + 500;
 
   private boolean gamePaused;

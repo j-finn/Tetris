@@ -135,7 +135,7 @@ public class RenderService extends JPanel {
     // Add text for waiting room
     graphics2D.setFont(new Font("Arial", Font.PLAIN, 30));
     graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    graphics2D.drawString("NEXT", x + 60, y + 60);
+    graphics2D.drawString("NEXT", x + 60, y + 50);
   }
 
 
@@ -162,7 +162,7 @@ public class RenderService extends JPanel {
   private void drawScoreboard(Graphics2D graphics2D) {
     int x = gameModel.getRightBoundary() + 100;
     graphics2D.drawRect(x, gameModel.getTopBoundary(), 250, 300);
-    x += 40;
+    x += 50;
     graphics2D.drawString("LEVEL: " + gameModel.getLevel(), x, gameModel.getTopBoundary() + 90);
     graphics2D.drawString("LINES: " + gameModel.getLines(), x, gameModel.getTopBoundary() + 160);
     graphics2D.drawString("SCORE: " + gameModel.getScore(), x, gameModel.getTopBoundary() + 230);
@@ -174,15 +174,16 @@ public class RenderService extends JPanel {
    */
   private void drawMinoCount(Graphics2D graphics2D) {
 
-    int x = gameModel.getLeftBoundary() - 350;
+    int x = gameModel.getLeftBoundary() - 300;
     graphics2D.setFont(new Font("Arial", Font.PLAIN, 30));
 
-//    graphics2D.drawRect(x, gameModel.getTopBoundary(), 250, 300);
-//    x += 40;
+    graphics2D.drawRect(x + 10, gameModel.getTopBoundary() + 65, 210, 375);
+    x += 40;
     int initialYOffset = 120;
 
     for (Map.Entry<TetrominoType, Integer> mino: gameModel.getMinoCount().entrySet()) {
-      graphics2D.drawString(mino.getKey().name() + " : " + mino.getValue(), x, gameModel.getTopBoundary() + initialYOffset);
+      graphics2D.setColor(mino.getKey().getColor());
+      graphics2D.drawString(mino.getKey().toString() + " : " + mino.getValue(), x, gameModel.getTopBoundary() + initialYOffset);
 
       // Offset for drawing the next Mino count
       initialYOffset += 50;
