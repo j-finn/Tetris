@@ -2,8 +2,9 @@
 <img width="300" alt="image" src="https://github.com/user-attachments/assets/744fedab-b45a-4cee-995c-3bb159ad4a6e"/>
 
 ## About
-Tetris clone implemented using Java Swing. Inspired by [RyiSnow]([url](https://www.youtube.com/@RyiSnow)).
-![image](https://github.com/user-attachments/assets/5eb6ce0f-2224-4b29-be17-e2c72b2c71b8)
+Tetris clone implemented using Java Swing. 
+
+<img width="700" alt="image" src="https://github.com/user-attachments/assets/5eb6ce0f-2224-4b29-be17-e2c72b2c71b8"/>
 
 
 ## Controls
@@ -14,3 +15,6 @@ Tetris clone implemented using Java Swing. Inspired by [RyiSnow]([url](https://w
 - Drop tetromino - Space bar
 - Pause game - Escape key
 - Toggle music - M key
+
+
+Inspired by [RyiSnow](https://www.youtube.com/@RyiSnow).
